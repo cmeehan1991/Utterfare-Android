@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/single_item_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="36dip" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="18dip"
+                        android:layout_height="18dip"
+                        android:src="@mipmap/ic_location_pin" />
+
+                    <TextView
+                        android:id="@+id/single_item_restaurant_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.75"
+                        android:onClick="openMap"
+                        style="@style/ItemLink"
+                        android:textSize="16dip" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/single_item_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dip" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp">
+
+                    <TextView
+                        android:id="@+id/single_item_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        style="@style/ItemLink"
+                        android:autoLink="phone" />
+
+                    <TextView
+                        android:id="@+id/single_item_link"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        style="@style/ItemLink"
+                        android:gravity="right"
+                        android:autoLink="web" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/single_item_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxHeight="200dip"
+                    android:scrollbars="vertical" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <ProgressBar
+        android:layout_width="72dip"
+        android:layout_height="72dip"
+        android:layout_centerInParent="true"
+        android:id="@+id/singleItemProgressBar"
+        android:indeterminateDrawable="@drawable/progress"/>
+</RelativeLayout>
