@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -44,8 +45,8 @@ public class Search extends AsyncTask<String, String, String> {
         distance = args[2];
         offset = args[3];
         page = args[4];
-
-        String limit = "25"; // Always limit to 25 per page
+        Log.i(TAG, location);
+        String limit = "10"; // Always limit to 25 per page
         String link = "https://www.utterfare.com/includes/php/android-search.php";
         try {
             // The data to be passed to the android-search.php file
@@ -56,6 +57,7 @@ public class Search extends AsyncTask<String, String, String> {
             data += "&" + URLEncoder.encode("offset", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(offset), "UTF-8");
             data += "&" + URLEncoder.encode("page", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(page), "UTF-8");
 
+            Log.i(TAG, data);
             // Establish and open the connection with the URL
             URL url = new URL(link);
             URLConnection conn = url.openConnection();
@@ -99,10 +101,15 @@ public class Search extends AsyncTask<String, String, String> {
         String currentClass = CONTEXT.getClass().toString();
         // Check for results.
         // If there aren't any results then we are going to handle that.
-        if(result == "No Results"){
+        Log.i(TAG, result);
+        if(result.equals("No Results") || result.isEmpty() || result.equals("<br />")){
+
             // Ask the user to try a different search.
             if(currentClass.contains("MainActivity")){
                 Toast.makeText(CONTEXT, "No results. Try a different search.", Toast.LENGTH_SHORT).show();
+                ProgressBar progressBar = ((MainActivity) CONTEXT).progressBar;
+                progressBar.setVisibility(View.INVISIBLE);
+                progressBar.setProgress(0);
             }else{
                 // This is for the feed only.
                 Toast.makeText(CONTEXT, "End of feed.", Toast.LENGTH_SHORT).show();
@@ -110,22 +117,26 @@ public class Search extends AsyncTask<String, String, String> {
         }else {
             // If we are running a new search from the main activity
             if (currentClass.contains("MainActivity")) {
-                // Hide the progress bar
-                ProgressBar progressBar = ((MainActivity) CONTEXT).progressBar;
-                progressBar.setVisibility(View.INVISIBLE);
-                progressBar.setProgress(0);
 
-                // Get the results activity, which is where we are heading next.
-                Activity resultsActivity = (Activity) CONTEXT;
+                if(!result.isEmpty()) {
 
-                // Start the new activity
-                Intent intent = new Intent(CONTEXT, ResultsActivity.class);
-                intent.putExtra("results", result);
-                intent.putExtra("page", page);
-                intent.putExtra("terms", terms);
-                intent.putExtra("location", location);
-                intent.putExtra("distance", distance);
-                resultsActivity.startActivity(intent);
+                    // Hide the progress bar
+                    ProgressBar progressBar = ((MainActivity) CONTEXT).progressBar;
+                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setProgress(0);
+
+                    // Get the results activity, which is where we are heading next.
+                    Activity resultsActivity = (Activity) CONTEXT;
+
+                    // Start the new activity
+                    Intent intent = new Intent(CONTEXT, ResultsActivity.class);
+                    intent.putExtra("results", result);
+                    intent.putExtra("page", page);
+                    intent.putExtra("terms", terms);
+                    intent.putExtra("location", location);
+                    intent.putExtra("distance", distance);
+                    resultsActivity.startActivity(intent);
+                }
             }
         }
     }

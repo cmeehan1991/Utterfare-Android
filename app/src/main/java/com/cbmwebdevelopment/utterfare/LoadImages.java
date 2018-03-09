@@ -30,8 +30,10 @@ public class LoadImages extends AsyncTask<String, Void, Bitmap>{
         try {
             url = new URL(params[0]).openStream();
             bmp = BitmapFactory.decodeStream(url);
+            url.close();
         } catch (IOException e) {
             Log.e(TAG, "Image error: " +  e.getMessage());
+        }finally{
         }
         return bmp;
     }

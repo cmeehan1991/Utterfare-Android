@@ -17,42 +17,8 @@
             android:id="@+id/searchLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="10dip">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/location_switcher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.0">
-
-                    <TextView
-                        android:id="@+id/location"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.0"
-                        android:clickable="true"
-                        android:onClick="ManualLocationInput"
-                        android:text="Finding Location..." />
-
-                    <EditText
-                        android:id="@+id/location_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.0" />
-                </ViewSwitcher>
-
-                <Spinner
-                    android:id="@+id/distance_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/distances" />
-            </LinearLayout>
+            android:layout_margin="10dip"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -64,16 +30,56 @@
                     android:id="@+id/terms"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_weight="0.7"
+                    android:layout_weight="0.8"
                     android:hint="Cheeseburger, steak, fish and chips" />
+
+                <Spinner
+                    android:id="@+id/distance_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/distances"
+                    android:layout_weight="0.2"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <Button
                     style="@style/SearchButton"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="0.3"
-                    android:background="@drawable/ic_search"
-                    android:onClick="submitSearch" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="submitSearch"
+                    android:text="Search" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="50dip"
+                        android:layout_height="50dip"
+                        android:layout_weight="0.5"
+                        android:src="@mipmap/ic_location_pin_round"
+                        android:background="@android:color/transparent" />
+
+                    <Button
+                        android:id="@+id/location"
+                        style="@style/LocationButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="manualLocationInput"
+                        android:text="Finding Location..."
+                        android:layout_weight="0.5"
+                        android:layout_gravity="start"
+                        android:textAlignment="textStart"
+                        android:background="@android:color/transparent"/>
+                </LinearLayout>
+
 
             </LinearLayout>
         </LinearLayout>
@@ -89,26 +95,11 @@
         android:layout_gravity="center"
         android:indeterminateDrawable="@drawable/progress"
         android:visibility="invisible" />
-    <!--
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="36dip"
-                android:layout_weight="0.5"
-                android:src="@drawable/ic_search"
-                android:background="#8e8e8e"
-                android:onClick=""/>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:src="@mipmap/ic_location_pin" />
-        </LinearLayout>
-        -->
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

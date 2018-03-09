@@ -100,7 +100,7 @@ public class ResultsActivity extends AppCompatActivity implements RecyclerView.O
         // Each JSON element is an array of values returned from the server.
         // We are going to loop through each of them and assign the individual value to it's
         // respective variable.
-        for (int i = 1; i < jsonArray.length(); i++) {
+        for (int i = 0; i < jsonArray.length(); i++) {
             ResultItems resultItems = new ResultItems();
             JSONObject jsonObj = null;
             try {

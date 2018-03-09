@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SearchButton">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorIcon</item>
+        <item name="android:elevation">8dp</item>
+
+    </style>
+</resources>
