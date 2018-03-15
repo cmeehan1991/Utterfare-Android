@@ -7,7 +7,7 @@ package com.cbmwebdevelopment.utterfare;
  */
 
 public class ResultItems {
-    private String itemId, dataTable, companyId, itemImage, itemName, itemDescription, phone, link, address;
+    private String itemId, dataTable, companyName, companyId, itemImage, itemName;
 
     public String getItemId() {
         return itemId;
@@ -23,6 +23,14 @@ public class ResultItems {
 
     public void setDataTable(String val) {
         this.dataTable = val;
+    }
+
+    public String getCompanyName(){
+        return companyName;
+    }
+
+    public String setCompanyName(String val){
+        return this.companyName = val;
     }
 
     public String getCompanyId(){
@@ -47,37 +55,5 @@ public class ResultItems {
 
     public void setItemName(String val) {
         this.itemName = val;
-    }
-
-    public String getItemDescription() {
-        return itemDescription;
-    }
-
-    public void setItemDescription(String val) {
-        this.itemDescription = val;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String val) {
-        this.phone = val;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String val) {
-        this.link = val;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String val) {
-        this.address = val;
     }
 }

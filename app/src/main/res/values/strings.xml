@@ -2,12 +2,12 @@
     <string name="app_name">Utterfare</string>
 
     <string-array name="distances">
-        <item>1 Mile</item>
-        <item>2 Miles</item>
-        <item>5 Miles</item>
-        <item>10 Miles</item>
-        <item>15 Miles</item>
-        <item>20 Miles</item>
-        <item>25 Miles</item>
+        <item>1 mi.</item>
+        <item>2 mi.</item>
+        <item>5 mi.</item>
+        <item>10 mi.</item>
+        <item>15 mi.</item>
+        <item>20 mi.</item>
+        <item>25 mi.</item>
     </string-array>
 </resources>

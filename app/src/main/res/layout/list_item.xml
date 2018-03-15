@@ -9,66 +9,21 @@
         style="@style/ItemTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:layout_width="18dip"
-            android:layout_height="18dip"
-            android:maxHeight="14dip"
-            android:maxWidth="14dip"
-            android:src="@mipmap/ic_location_pin" />
+        android:gravity="center_horizontal"
+        android:text="Menu Item"/>
 
         <TextView
-            android:id="@+id/item_address"
-            style="@style/ItemLink"
+            android:id="@+id/item_restaurant_name"
+            style="@style/ItemDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:autoLink="map" />
-    </LinearLayout>
+            android:textAlignment="center"
+            android:text="Restaurant Name"/>
 
     <ImageView
         android:id="@+id/item_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="200dip"
-        android:maxHeight="300dip"
-        android:gravity="center_horizontal" />
-
-   <!-- <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp">
-
-        <TextView
-            android:id="@+id/item_phone"
-            style="@style/ItemLink"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.0"
-            android:autoLink="phone" />
-
-        <TextView
-            android:id="@+id/item_url"
-            style="@style/ItemLink"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.0"
-            android:autoLink="web" />
-    </LinearLayout> -->
-
-
-    <!--<TextView
-        android:id="@+id/item_description"
-        style="@style/ItemDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:padding="16dp" />-->
+        android:gravity="center_horizontal"/>
 </LinearLayout>

@@ -53,10 +53,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
 
         holder.itemName.setText(resultItems.getItemName());
         new LoadImages((ImageView) holder.itemView.findViewById(R.id.item_image)).execute(resultItems.getItemImage());
-        //holder.itemDescription.setText(resultItems.getItemDescription());
-        //holder.phone.setText(resultItems.getPhone());
-        //holder.url.setText(resultItems.getLink());
-        holder.itemAddress.setText(resultItems.getAddress());
+        holder.itemRestaurantName.setText(resultItems.getCompanyName());
     }
 
     @Override
@@ -65,17 +62,14 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView itemName, itemDescription,  phone, url, itemAddress;
+        public TextView itemName, itemDescription,  phone, url, itemRestaurantName;
         public ImageView itemImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
             itemName = (TextView) itemView.findViewById(R.id.item_name);
             itemImage = (ImageView) itemView.findViewById(R.id.item_image);
-            //itemDescription = (TextView) itemView.findViewById(R.id.item_description);
-            //phone = (TextView) itemView.findViewById(R.id.item_phone);
-            //url = (TextView) itemView.findViewById(R.id.item_url);
-            itemAddress = (TextView) itemView.findViewById(R.id.item_address);
+            itemRestaurantName = (TextView) itemView.findViewById(R.id.item_restaurant_name);
         }
     }
 }

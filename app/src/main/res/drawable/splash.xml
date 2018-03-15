@@ -5,6 +5,6 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/uf_icon"/>
+            android:src="@mipmap/uf_icon_white_no_background"/>
     </item>
 </layer-list>

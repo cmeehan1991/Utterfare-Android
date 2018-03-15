@@ -1,11 +1,9 @@
 package com.cbmwebdevelopment.utterfare;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -28,7 +26,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
@@ -42,7 +39,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 import cbmwebdevelopment.utterfare.R;
 
@@ -80,29 +76,29 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         initializeInputs();
 
         // Set the click listener for the bottom navigation view
-        searchActionMenuItem.setChecked(true);
-        feedActionMenuItem.setChecked(false);
+//        searchActionMenuItem.setChecked(true);
+//        feedActionMenuItem.setChecked(false);
 
         // Show feed on menu item click
-        feedActionMenuItem.setOnMenuItemClickListener((listener) -> {
-            Intent intent = new Intent(this, GridViewActivity.class);
-            startActivity(intent, savedInstanceState);
-            return true;
-        });
+//        feedActionMenuItem.setOnMenuItemClickListener((listener) -> {
+//            Intent intent = new Intent(this, GridViewActivity.class);
+//            startActivity(intent, savedInstanceState);
+//            return true;
+//        });
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
     }
 
-    private void setLocationCallback(){
+    private void setLocationCallback() {
 
-        mLocationCallback = new LocationCallback(){
+        mLocationCallback = new LocationCallback() {
             @Override
-            public void onLocationResult(LocationResult locationResult){
-                if(locationResult == null){
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
                     return;
                 }
-                for(Location location : locationResult.getLocations()){
+                for (Location location : locationResult.getLocations()) {
                     latitude = String.valueOf(location.getLatitude());
                     longitude = String.valueOf(location.getLongitude());
                     setAddress(location.getLatitude(), location.getLongitude());
@@ -136,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         } else {
             hasPermission = true;
         }
-        if(hasPermission) {
+        if (hasPermission) {
             mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
@@ -151,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setLocationCallback();
     }
 
-    private void createLocationRequest(){
+    private void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(5000);
         mLocationRequest.setFastestInterval(1000);
@@ -177,28 +173,28 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-        if(mRequestingLocationUpdates){
+        if (mRequestingLocationUpdates) {
             startLocationUpdates();
         }
     }
 
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
         stopLocationUpdates();
     }
 
-    private void stopLocationUpdates(){
+    private void stopLocationUpdates() {
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
         latitude = null;
         longitude = null;
     }
 
 
-    private void startLocationUpdates(){
+    private void startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
@@ -210,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         } else {
             hasPermission = true;
         }
-        if(hasPermission) {
+        if (hasPermission) {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
         }
     }
@@ -225,9 +221,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         searchLayout = (LinearLayout) findViewById(R.id.searchLayout);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        bottomNavigationMenu = mBottomNavigationView.getMenu();
-        searchActionMenuItem = bottomNavigationMenu.getItem(0);
-        feedActionMenuItem = bottomNavigationMenu.getItem(1);
+//        bottomNavigationMenu = mBottomNavigationView.getMenu();
+//        searchActionMenuItem = bottomNavigationMenu.getItem(0);
+//        feedActionMenuItem = bottomNavigationMenu.getItem(1);
         locationButton = (Button) findViewById(R.id.location);
     }
 

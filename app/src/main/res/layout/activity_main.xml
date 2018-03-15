@@ -28,18 +28,18 @@
 
                 <EditText
                     android:id="@+id/terms"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_weight="0.8"
-                    android:hint="Cheeseburger, steak, fish and chips" />
+                    android:layout_weight="0.92"
+                    android:layout_alignParentLeft="true"
+                    android:hint="Search for something..." />
 
                 <Spinner
                     android:id="@+id/distance_spinner"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/distances"
-                    android:layout_weight="0.2"/>
-
+                    android:layout_height="50dp"
+                    android:layout_weight="0.08"
+                    android:entries="@array/distances" />
             </LinearLayout>
 
             <LinearLayout
@@ -62,22 +62,24 @@
                     <ImageView
                         android:layout_width="50dip"
                         android:layout_height="50dip"
-                        android:layout_weight="0.5"
-                        android:src="@mipmap/ic_location_pin_round"
-                        android:background="@android:color/transparent" />
+                        android:layout_weight="0.1"
+                        android:background="@android:color/transparent"
+                        android:src="@mipmap/ic_location_pin_round" />
 
                     <Button
                         android:id="@+id/location"
                         style="@style/LocationButton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_weight="0.8"
+                        android:background="@android:color/transparent"
                         android:clickable="true"
                         android:onClick="manualLocationInput"
                         android:text="Finding Location..."
-                        android:layout_weight="0.5"
-                        android:layout_gravity="start"
-                        android:textAlignment="textStart"
-                        android:background="@android:color/transparent"/>
+                        android:textAlignment="textStart" />
+
+
                 </LinearLayout>
 
 
@@ -96,10 +98,10 @@
         android:indeterminateDrawable="@drawable/progress"
         android:visibility="invisible" />
 
-    <include
+    <!--<include
         android:id="@+id/toolbar"
         layout="@layout/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true" />-->
 </RelativeLayout>

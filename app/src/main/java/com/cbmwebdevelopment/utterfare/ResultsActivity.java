@@ -3,6 +3,7 @@ package com.cbmwebdevelopment.utterfare;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +44,7 @@ public class ResultsActivity extends AppCompatActivity implements RecyclerView.O
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
     public static ProgressBar progressBar;
+    private Parcelable recyclerViewState;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -78,11 +80,7 @@ public class ResultsActivity extends AppCompatActivity implements RecyclerView.O
         adapter = new ResultAdapter(resultItemsList, this);
 
         recyclerView.setAdapter(adapter);
-        try {
-            showItems(results);
-        } catch (JSONException ex) {
-            Log.e(TAG, "Show items exception: " + ex.getMessage());
-        }
+        showItems(results);
     }
 
     /**
@@ -92,46 +90,54 @@ public class ResultsActivity extends AppCompatActivity implements RecyclerView.O
      * @throws JSONException
      * @throws IOException
      */
-    public void showItems(String res) throws JSONException {
-
-        // Get the result and convert it into a JSON Array
-        JSONArray jsonArray = new JSONArray(res);
-
-        // Each JSON element is an array of values returned from the server.
-        // We are going to loop through each of them and assign the individual value to it's
-        // respective variable.
-        for (int i = 0; i < jsonArray.length(); i++) {
-            ResultItems resultItems = new ResultItems();
-            JSONObject jsonObj = null;
+    public void showItems(String res) {
+        Log.i(TAG, "Results: " + res);
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.submit(() -> {
             try {
-                jsonObj = jsonArray.getJSONObject(i); // Convert each array to an JSON object
-                resultItems.setItemId(jsonObj.getString("ITEM_ID"));
-                resultItems.setDataTable(jsonObj.getString("DATA_TABLE"));
-                resultItems.setCompanyId(jsonObj.getString("COMPANY_ID"));
-                resultItems.setItemId(jsonObj.getString("ITEM_ID"));
-                resultItems.setItemImage(jsonObj.getString("IMAGE_URL"));
-                resultItems.setItemName(jsonObj.getString("NAME"));
-                resultItems.setItemDescription(jsonObj.getString("DESCRIPTION"));
-                resultItems.setPhone(jsonObj.getString("PHONE"));
-                resultItems.setLink(jsonObj.getString("LINK"));
-                resultItems.setAddress(jsonObj.getString("ADDRESS") + ", " + jsonObj.getString("CITY") + ", " + jsonObj.getString("STATE"));
+                // Get the result and convert it into a JSON Array
+                JSONArray jsonArray = new JSONArray(res);
+
+                // Each JSON element is an array of values returned from the server.
+                // We are going to loop through each of them and assign the individual value to it's
+                // respective variable.
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    ResultItems resultItems = new ResultItems();
+                    JSONObject jsonObj = null;
+                    try {
+                        jsonObj = jsonArray.getJSONObject(i); // Convert each array to an JSON object
+                        resultItems.setItemId(jsonObj.getString("ITEM_ID"));
+                        resultItems.setDataTable(jsonObj.getString("DATA_TABLE"));
+                        resultItems.setCompanyId(jsonObj.getString("COMPANY_ID"));
+                        resultItems.setCompanyName(jsonObj.getString("COMPANY"));
+                        resultItems.setItemImage(jsonObj.getString("IMAGE_URL"));
+                        resultItems.setItemName(jsonObj.getString("NAME"));
+                    } catch (JSONException ex) {
+                        Log.e(TAG, "JSON Exception: " + ex.getMessage());
+                    }
+
+                    resultItemsList.add(resultItems);
+                }
             } catch (JSONException ex) {
                 Log.e(TAG, "JSON Exception: " + ex.getMessage());
             }
-            ExecutorService executor = Executors.newCachedThreadPool();
-            executor.submit(() -> {
-                resultItemsList.add(resultItems);
-                executor.shutdown();
-            });
-        }
-        Log.i(TAG, "Notify data set changed");
-        adapter.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
+            /*runOnUiThread(()->{
+                //recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+                adapter.notifyDataSetChanged();
+                //recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+            });*/
+            executor.shutdown();
+        });
+
     }
 
     private boolean isLastItemDisplaying(RecyclerView recyclerView) {
         if (recyclerView.getAdapter().getItemCount() != 0) {
             int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-            if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 1) {
+            Log.i(TAG, "Last visible item position: " + String.valueOf(lastVisibleItemPosition));
+            if (lastVisibleItemPosition != RecyclerView.NO_POSITION && lastVisibleItemPosition == recyclerView.getAdapter().getItemCount() - 5) {
+                Log.i(TAG, "True");
                 return true;
             }
         }
@@ -142,7 +148,7 @@ public class ResultsActivity extends AppCompatActivity implements RecyclerView.O
     public void onScrollChange(View view, int i, int i1, int i2, int i3) {
         if (isLastItemDisplaying(recyclerView)) {
             page++;
-            offset += 25;
+            offset += 10;
             try {
                 progressBar.setVisibility(View.VISIBLE);
                 progressBar.setIndeterminate(true);
@@ -155,7 +161,7 @@ public class ResultsActivity extends AppCompatActivity implements RecyclerView.O
                 }
                 progressBar.setVisibility(View.INVISIBLE);
                 progressBar.setIndeterminate(false);
-            } catch (InterruptedException | JSONException | ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         }
