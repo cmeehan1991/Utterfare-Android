@@ -1,107 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+<android.support.v4.app.FragmentTabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/tabhost"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#ffffff">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical"
-        tools:context="cbmwebdevelopment.utterfare.com.cbmwebdevelopment.utterfare.MainActivity">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/searchLayout"
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:id="@android:id/tabcontent"
+            android:layout_height="0dip"
+            android:layout_weight="1"/>
+
+        <TabWidget
+            android:id="@android:id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dip"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/terms"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_weight="0.92"
-                    android:layout_alignParentLeft="true"
-                    android:hint="Search for something..." />
-
-                <Spinner
-                    android:id="@+id/distance_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_weight="0.08"
-                    android:entries="@array/distances" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <Button
-                    style="@style/SearchButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:onClick="submitSearch"
-                    android:text="Search" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="50dip"
-                        android:layout_height="50dip"
-                        android:layout_weight="0.1"
-                        android:background="@android:color/transparent"
-                        android:src="@mipmap/ic_location_pin_round" />
-
-                    <Button
-                        android:id="@+id/location"
-                        style="@style/LocationButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:layout_weight="0.8"
-                        android:background="@android:color/transparent"
-                        android:clickable="true"
-                        android:onClick="manualLocationInput"
-                        android:text="Finding Location..."
-                        android:textAlignment="textStart" />
-
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_weight="0"
+            style="@style/TabHostStyle"></TabWidget>
     </LinearLayout>
-
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:indeterminateDrawable="@drawable/progress"
-        android:visibility="invisible" />
-
-    <!--<include
-        android:id="@+id/toolbar"
-        layout="@layout/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />-->
-</RelativeLayout>
+</android.support.v4.app.FragmentTabHost>
