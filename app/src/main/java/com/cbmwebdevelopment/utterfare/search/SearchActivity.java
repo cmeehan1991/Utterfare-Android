@@ -23,9 +23,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -73,6 +76,7 @@ public class SearchActivity extends Fragment {
     private Context mContext;
     private Activity mActivity;
     private View v;
+    private ImageView loadingIndicator;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -220,12 +224,10 @@ public class SearchActivity extends Fragment {
         terms = (EditText) v.findViewById(R.id.terms);
         searchLayout = (LinearLayout) v.findViewById(R.id.searchLayout);
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
-        //mBottomNavigationView = (BottomNavigationView) v.findViewById(R.id.bottom_navigation);
-//        bottomNavigationMenu = mBottomNavigationView.getMenu();
-//        searchActionMenuItem = bottomNavigationMenu.getItem(0);
-//        feedActionMenuItem = bottomNavigationMenu.getItem(1);
+        loadingIndicator = (ImageView) v.findViewById(R.id.loading_indicator);
         locationButton = (Button) v.findViewById(R.id.location);
         submitSearchButton = (Button) v.findViewById(R.id.submitSearchButton);
+
     }
 
 

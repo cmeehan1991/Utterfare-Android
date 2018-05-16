@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +32,9 @@ import cbmwebdevelopment.utterfare.R;
 public class SavedItemsAdapter extends RecyclerView.Adapter<SavedItemsAdapter.ViewHolder> {
     private final String TAG = SavedItemsAdapter.class.getName();
     private Context context;
-    List<ResultItems> results;
+    List<SavedItems> results;
 
-    public SavedItemsAdapter(List<ResultItems> results, Context context) {
+    public SavedItemsAdapter(List<SavedItems> results, Context context) {
         super();
         this.results = results;
         this.context = context;
@@ -49,24 +50,27 @@ public class SavedItemsAdapter extends RecyclerView.Adapter<SavedItemsAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ResultItems resultItems = results.get(position);
+        SavedItems savedItems = results.get(position);
 
         holder.itemView.setOnClickListener((listener)->{
             Bundle bundle = new Bundle();
-            bundle.putString("itemId", resultItems.getItemId());
-            bundle.putString("dataTable", resultItems.getDataTable());
+            bundle.putString("itemId", savedItems.getItemId());
+            bundle.putString("dataTable", savedItems.getDataTable());
 
             goToSingleItemView(bundle);
 
         });
 
-        holder.itemName.setText(resultItems.getItemName());
-        new LoadImages((ImageView) holder.itemView.findViewById(R.id.item_image)).execute(resultItems.getItemImage());
-        holder.itemRestaurantName.setText(resultItems.getCompanyName());
+        holder.savedItemName.setText(savedItems.getItemName());
+        new LoadImages((ImageView) holder.itemView.findViewById(R.id.saved_item_image)).execute(savedItems.getItemImage());
+        holder.itemRestaurantName.setText(savedItems.getCompanyName());
     }
+
     private void goToSingleItemView(Bundle bundle){
         SingleItemActivity singleItemActivity = new SingleItemActivity();
+
         singleItemActivity.setArguments(bundle);
+        Log.i(TAG, bundle.toString());
         FragmentActivity activity = (FragmentActivity) context;
 
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
@@ -84,14 +88,14 @@ public class SavedItemsAdapter extends RecyclerView.Adapter<SavedItemsAdapter.Vi
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView itemName, itemDescription,  phone, url, itemRestaurantName;
+        public TextView savedItemName, itemDescription,  phone, url, itemRestaurantName;
         public ImageView itemImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            itemName = (TextView) itemView.findViewById(R.id.item_name);
-            itemImage = (ImageView) itemView.findViewById(R.id.item_image);
-            itemRestaurantName = (TextView) itemView.findViewById(R.id.item_restaurant_name);
+            savedItemName = (TextView) itemView.findViewById(R.id.saved_item_name);
+            itemImage = (ImageView) itemView.findViewById(R.id.saved_item_image);
+            itemRestaurantName = (TextView) itemView.findViewById(R.id.saved_item_restaurant_name);
         }
     }
 }

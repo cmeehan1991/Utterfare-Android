@@ -22,7 +22,8 @@
                     android:id="@+id/single_item_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="36dip" />
+                    android:textSize="18dp"
+                    android:textAlignment="center"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -32,7 +33,7 @@
                     <ImageView
                         android:layout_width="18dip"
                         android:layout_height="18dip"
-                        android:src="@mipmap/ic_location_pin" />
+                        android:src="@drawable/ic_location_pin_light" />
 
                     <TextView
                         android:id="@+id/single_item_restaurant_name"
@@ -48,28 +49,28 @@
                     android:id="@+id/single_item_image"
                     android:layout_width="match_parent"
                     android:layout_height="300dip" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp">
 
-                    <TextView
+                    <Button
+                        style="@style/ContactButton"
                         android:id="@+id/single_item_phone"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
-                        style="@style/ItemLink"
+                        android:text="Call Now"
                         android:autoLink="phone" />
 
-                    <TextView
+                    <Button
+                        style="@style/ContactButton"
                         android:id="@+id/single_item_link"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
-                        style="@style/ItemLink"
-                        android:gravity="right"
+                        android:text="Visit Website"
                         android:autoLink="web" />
                 </LinearLayout>
 
@@ -77,8 +78,8 @@
                     android:id="@+id/single_item_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxHeight="200dip"
-                    android:scrollbars="vertical" />
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
@@ -95,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_add"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_favorites"
         android:id="@+id/addItemFab"/>
 </RelativeLayout>

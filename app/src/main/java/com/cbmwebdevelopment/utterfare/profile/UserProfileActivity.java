@@ -1,7 +1,11 @@
 package com.cbmwebdevelopment.utterfare.profile;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
@@ -22,6 +26,7 @@ import com.cbmwebdevelopment.utterfare.user.UserLoginActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import cbmwebdevelopment.utterfare.R;
@@ -103,6 +108,7 @@ public class UserProfileActivity extends Fragment {
         JSONObject jsonObject = new JSONObject(results);
         boolean success = jsonObject.getBoolean("SUCCESS");
         if(success){
+            Log.i(TAG, jsonObject.toString());
             firstNameEditText.setText(jsonObject.getString("FIRST_NAME"));
             lastNameEditText.setText(jsonObject.getString("LAST_NAME"));
             cityEditText.setText(jsonObject.getString("CITY"));
@@ -180,9 +186,7 @@ public class UserProfileActivity extends Fragment {
      */
     private void setClickListeners(){
         signOutTextView.setOnClickListener((l)->{
-            mSharedPreferences.edit().putBoolean("LOGGED_IN", false);
-            mSharedPreferences.edit().putString("USER_ID", null);
-            goToSignIn();
+            goToUserLogin();
         });
 
         changePasswordTextView.setOnClickListener((l) ->{
@@ -197,16 +201,46 @@ public class UserProfileActivity extends Fragment {
         });
 
         deleteAccountTextView.setOnClickListener((l)->{
+            AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+            builder.setTitle("Delete Account")
+                    .setMessage("Are you sure you want to delete your account? This will remove all of your saved items and cannot be recovered.")
+                    .setPositiveButton("Delete Account", (dialog, listener)->{
+                        String userId = mSharedPreferences.getString("USER_ID", null);
+                        try {
+                            DeleteUserAccountModel deleteUserAccountModel = new DeleteUserAccountModel();
+                            String res = deleteUserAccountModel.execute(userId).get();
+                            JSONObject jsonObject = new JSONObject(res);
+                            String response = jsonObject.getString("RESPONSE");
+                            boolean status = jsonObject.getBoolean("STATUS");
+                            if(status){
+                                goToUserLogin();
+                            }else{
+                                Toast.makeText(mContext, "Failed to delete account. Please try again.", Toast.LENGTH_LONG).show();
+                            }
+                        }catch(InterruptedException | ExecutionException | JSONException ex){
+                            Log.e(TAG, "IO Exception: " + ex.getMessage());
+                        }
+                    })
+                    .setNegativeButton("Cancel", (dialog, listener)->{});
+            AlertDialog dialog = builder.create();
+            dialog.setOnShowListener((listener)->{
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
+            });
 
+            dialog.show();
         });
     }
 
-    private void goToSignIn(){
+    private void goToUserLogin(){
+        mSharedPreferences.edit().putBoolean("LOGGED_IN", false).commit();
+        mSharedPreferences.edit().putString("USER_ID", null).commit();
         UserLoginActivity userLoginActivity = new UserLoginActivity();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .replace(android.R.id.tabcontent, userLoginActivity);
+        fragmentManager.popBackStack();
         fragmentTransaction.commit();
     }
+
 }

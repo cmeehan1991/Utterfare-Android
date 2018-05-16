@@ -6,7 +6,7 @@ package com.cbmwebdevelopment.utterfare.saved;
  * Connor.Meehan@cbmwebdevelopment.com
  */
 
-public class SavedItemsItems {
+public class SavedItems {
     private String itemId, dataTable, companyName, companyId, itemImage, itemName;
 
     public String getItemId() {

@@ -2,29 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="#ffffff">
+    android:background="#ffffff"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/item_name"
+        android:id="@+id/saved_item_name"
         style="@style/ItemTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="Menu Item"/>
+        android:text="Menu Item" />
 
-        <TextView
-            android:id="@+id/item_restaurant_name"
-            style="@style/ItemDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="Restaurant Name"/>
-
-    <ImageView
-        android:id="@+id/item_image"
+    <TextView
+        android:id="@+id/saved_item_restaurant_name"
+        style="@style/ItemDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="200dip"
-        android:gravity="center_horizontal"/>
+        android:text="Restaurant Name"
+        android:textAlignment="center" />
+
+    <ImageView
+        android:id="@+id/saved_item_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:minHeight="200dp" />
 </LinearLayout>

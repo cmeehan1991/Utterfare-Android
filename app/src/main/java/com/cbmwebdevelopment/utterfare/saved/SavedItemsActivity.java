@@ -9,20 +9,26 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.cbmwebdevelopment.utterfare.profile.UserProfileActivity;
+import com.cbmwebdevelopment.utterfare.results.ResultAdapter;
 import com.cbmwebdevelopment.utterfare.user.UserLoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -36,12 +42,19 @@ import static com.cbmwebdevelopment.utterfare.main.MainActivity.UF_SHARED_PREFER
  * CBM Web Development
  * Connor.Meehan@cbmwebdevelopment.com
  */
-public class SavedItemsActivity extends Fragment {
+public class SavedItemsActivity extends Fragment{
     private View v;
     public SharedPreferences sharedPreferences;
     private String TAG = this.getClass().getName();
     private Activity mActivity;
     private Context mContext;
+    private RecyclerView savedItemsRecyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private RecyclerView.Adapter adapter;
+    private ProgressBar progressBar;
+    private List<SavedItems> itemsList;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -51,11 +64,13 @@ public class SavedItemsActivity extends Fragment {
         boolean isLoggedIn = sharedPreferences.getBoolean("LOGGED_IN", false);
 
         if(!isLoggedIn){
+            Log.i(TAG, "Not Logged In");
             UserLoginActivity userLoginActivity = new UserLoginActivity();
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            fragmentTransaction.replace(android.R.id.tabcontent, userLoginActivity);
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .replace(android.R.id.tabcontent, userLoginActivity);
+            fragmentManager.popBackStack();
             fragmentTransaction.commit();
         }
 
@@ -70,9 +85,6 @@ public class SavedItemsActivity extends Fragment {
 
         mContext = getContext();
 
-       // getFragmentManager().beginTransaction().replace(android.R.id.tabcontent, this).commit();
-        getItems();
-
         return v;
     }
 
@@ -80,6 +92,19 @@ public class SavedItemsActivity extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         mActivity = getActivity();
+        initializeView();
+    }
+
+    private void initializeView(){
+        savedItemsRecyclerView = (RecyclerView) v.findViewById(R.id.savedItemsRecyclerView);
+        savedItemsRecyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(mContext);
+        savedItemsRecyclerView.setLayoutManager(layoutManager);
+        progressBar = (ProgressBar) v.findViewById(R.id.loadMoreProgressBar);
+
+        itemsList = new ArrayList<>();
+
+        setRecycler();
     }
 
     @Override
@@ -88,6 +113,7 @@ public class SavedItemsActivity extends Fragment {
         inflater.inflate(R.menu.user_menu, menu);
         menu.getItem(0).setOnMenuItemClickListener((l)->{
             UserProfileActivity userProfileActivity = new UserProfileActivity();
+
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -98,42 +124,61 @@ public class SavedItemsActivity extends Fragment {
         });
     }
 
+    private void setRecycler(){
+        adapter = new SavedItemsAdapter(itemsList, mContext);
+
+        savedItemsRecyclerView.setAdapter(adapter);
+        getItems();
+    }
+
     private void getItems(){
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.bringToFront();
         try {
             GetSavedItemsModel getSavedItemsModel = new GetSavedItemsModel();
-            String results = getSavedItemsModel.execute().get();
+            String userId = sharedPreferences.getString("USER_ID", null);
+            if(userId != null) {
+                String results = getSavedItemsModel.execute(userId).get();
 
-            if(results != null){
-                JSONArray jsonArray = new JSONArray(results);
-                showItems(jsonArray);
-            }else{
-                Snackbar.make(v.findViewById(android.R.id.content), "You don't have any saved items yet.", Snackbar.LENGTH_INDEFINITE)
-                        .setAction("SEARCH", (l)->{
-                            FragmentTabHost host = (FragmentTabHost) mActivity.findViewById(android.R.id.tabhost);
-                            host.setCurrentTab(0);
-                        }).show();
+                if (results != null) {
+                    JSONArray jsonArray = new JSONArray(results);
+                    showItems(jsonArray);
+                } else {
+                    Log.i(TAG, "Activity: " + mActivity);
+                    Snackbar.make(mActivity.findViewById(android.R.id.tabcontent), "You don't have any saved items yet.", Snackbar.LENGTH_INDEFINITE)
+                            .setAction("SEARCH", (l) -> {
+                                FragmentTabHost host = (FragmentTabHost) mActivity.findViewById(android.R.id.tabhost);
+                                host.setCurrentTab(0);
+                            }).show();
+                }
             }
         }catch(ExecutionException | InterruptedException | JSONException ex){
             Log.e(TAG, "Results: " + ex.getMessage());
         }
     }
 
-    private void showItems(JSONArray jsonArray){
+    private void showItems(JSONArray jsonArrResponse){
+
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(()->{
-            SavedItemsItems items = new SavedItemsItems();
-            for(int i = 0; i < jsonArray.length(); i++){
+            for(int i = 0; i < jsonArrResponse.length(); i++){
+                SavedItems items = new SavedItems();
                 try {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    JSONObject jsonObject = jsonArrResponse.getJSONObject(i);
                     items.setItemId(jsonObject.getString("ITEM_ID"));
                     items.setItemName(jsonObject.getString("ITEM_NAME"));
-                    items.setDataTable(jsonObject.getString("DATA_TABLE"));
-                    items.setItemImage(jsonObject.getString("IMAGE_URL"));
+                    items.setDataTable(jsonObject.getString("ITEM_DATA_TABLE"));
+                    items.setItemImage(jsonObject.getString("ITEM_IMAGE_URL"));
                     items.setItemName(jsonObject.getString("ITEM_NAME"));
                 }catch(JSONException ex){
                     Log.e(TAG, "JSON Exception: " + ex.getMessage());
                 }
+                itemsList.add(items);
             }
+            adapter.notifyDataSetChanged();
+            progressBar.setVisibility(View.INVISIBLE);
+            progressBar.setProgress(0);
+            executor.shutdown();
         });
     }
 

@@ -1,4 +1,4 @@
-package com.cbmwebdevelopment.utterfare.saved;
+package com.cbmwebdevelopment.utterfare.profile;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -8,53 +8,52 @@ import com.cbmwebdevelopment.utterfare.main.GlobalVariables;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
+
 /**
- * Created by Connor Meehan on 5/9/18.
+ * Created by Connor Meehan on 5/15/18.
  * CBM Web Development
  * Connor.Meehan@cbmwebdevelopment.com
  */
-public class GetSavedItemsModel extends AsyncTask<String, Void, String> implements GlobalVariables {
+public class DeleteUserAccountModel extends AsyncTask<String, Void, String> implements GlobalVariables{
     private final String TAG = getClass().getName();
     @Override
     protected String doInBackground(String... args) {
-        String userId = args[0];
         String results = null;
+        String userId = args[0];
         try{
-            URL url = new URL(USER_ITEMS_URL);
+            // Establish connection
+            URL url = new URL(USER_LINK);
             URLConnection conn = url.openConnection();
             conn.setDoOutput(true);
 
-            // Set the parameters to be passed to the server
-            String data = URLEncoder.encode("action", "UTF-8")  + "=" + URLEncoder.encode("get_items", "UTF-8");
-            data += "&" + URLEncoder.encode("user_id", "UTF-8") + "=" + URLEncoder.encode(userId, "UTF-8");
+            // Data to be passed to the server.
+            String data = URLEncoder.encode("action", ENCODING) + "=" + URLEncoder.encode("remove_user", ENCODING);
+            data += "&" + URLEncoder.encode("user_id", ENCODING) + "=" + URLEncoder.encode(userId, ENCODING);
 
-            // Write the data to the stream
+            // Write the data to the server
             OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
             writer.write(data);
             writer.flush();
 
-            // Read the response
+            // Get the response from the server
             BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
-            StringBuilder sb = new StringBuilder();
-            String line = null;
+            //Set the results to be returned
+            results = reader.readLine();
 
-            while((line = reader.readLine()) != null){
-                sb.append(line);
-                break;
-            }
-
-            // Set the results
-            results = sb.toString();
+            // Close the connection
+            writer.close();
+            reader.close();
         }catch(IOException ex){
-            Log.i(TAG, "Error: " + ex.getMessage());
+            Log.e(TAG, "IOException: " + ex.getMessage());
+            results = "{\"STATUS\":false,\"RESPONSE\":" + ex.getMessage() + "}";
         }
         return results;
     }

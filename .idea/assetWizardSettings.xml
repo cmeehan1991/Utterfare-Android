@@ -34,7 +34,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_search_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_location_on_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -56,8 +56,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="imageAsset" value="$USER_HOME$/Documents/Web Projects/Utterfare/Utterfare/iOS Icons/iconGen_Utterfare Base Logo White - Primary Background_iOS/Utterfare Base Logo White - Primary Background_83pt@2x.png" />
-                                      <entry key="outputName" value="ic_search_dark" />
-                                      <entry key="theme" value="HOLO_DARK" />
+                                      <entry key="outputName" value="ic_location_pin_light" />
                                     </map>
                                   </option>
                                 </PersistentState>

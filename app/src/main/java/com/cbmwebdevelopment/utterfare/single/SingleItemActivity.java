@@ -1,13 +1,16 @@
 package com.cbmwebdevelopment.utterfare.single;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -27,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URI;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -45,8 +50,10 @@ import static com.google.android.gms.internal.zzagy.runOnUiThread;
  */
 
 public class SingleItemActivity extends Fragment {
+    private static final int REQUEST_PHONE_CALL = 0;
     private final String TAG = "SingleItemActivity";
-    private TextView itemNameView, restaurantNameView, restPhoneView, restUrlView, itemDescriptionView;
+    private TextView itemNameView, restaurantNameView, itemDescriptionView;
+    private Button restPhoneView, restUrlView;
     private ImageView itemImageView;
     private ProgressBar progressBar;
     private FloatingActionButton addItemFab;
@@ -57,7 +64,7 @@ public class SingleItemActivity extends Fragment {
     private SharedPreferences sharedPreferences;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
@@ -66,17 +73,18 @@ public class SingleItemActivity extends Fragment {
         v = inflater.inflate(R.layout.single_item, container, false);
         return v;
     }
+
     @Override
-    public void onActivityCreated(Bundle savedInstanceState){
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initializeView();
         mActivity = getActivity();
         sharedPreferences = mActivity.getSharedPreferences(UF_SHARED_PREFERENCES, Context.MODE_PRIVATE);
         handleActionItems();
 
-        if(getArguments() != null){
+        if (getArguments() != null) {
             parseArguments();
-        }else {
+        } else {
             handleEmpty();
         }
     }
@@ -85,19 +93,38 @@ public class SingleItemActivity extends Fragment {
      * Handle any custom action items
      * Items handled: Add Item Floating Action Button
      */
-    private void handleActionItems(){
-        addItemFab.setOnClickListener((l)->{
+    private void handleActionItems() {
+        addItemFab.setOnClickListener((l) -> {
             boolean isLoggedIn = sharedPreferences.getBoolean("LOGGED_IN", false);
-            if(isLoggedIn){
+            if (isLoggedIn) {
                 addItem();
-            }else{
+            } else {
                 UserLoginActivity userLoginActivity = new UserLoginActivity();
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction().setTransition(TRANSIT_FRAGMENT_OPEN).replace(android.R.id.tabcontent, userLoginActivity);
                 transaction.commit();
             }
         });
+
+        restPhoneView.setOnClickListener((l) -> {
+            Intent intent = new Intent(Intent.ACTION_CALL);
+            intent.setData(Uri.parse("tel:" + restPhone));
+
+            if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(mActivity, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
+
+            }else{
+                mActivity.startActivity(intent);
+            }
+        });
+
+        restUrlView.setOnClickListener((l)->{
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(restUrl));
+            mActivity.startActivity(intent);
+        });
     }
+
 
     /**
      * Add the item to the users favorites
@@ -135,8 +162,8 @@ public class SingleItemActivity extends Fragment {
         itemNameView = (TextView) v.findViewById(R.id.single_item_name);
         itemImageView = (ImageView) v.findViewById(R.id.single_item_image);
         restaurantNameView = (TextView) v.findViewById(R.id.single_item_restaurant_name);
-        restPhoneView = (TextView) v.findViewById(R.id.single_item_phone);
-        restUrlView = (TextView) v.findViewById(R.id.single_item_link);
+        restPhoneView = (Button) v.findViewById(R.id.single_item_phone);
+        restUrlView = (Button) v.findViewById(R.id.single_item_link);
         itemDescriptionView = (TextView) v.findViewById(R.id.single_item_description);
         progressBar = (ProgressBar) v.findViewById(R.id.singleItemProgressBar);
         addItemFab = (FloatingActionButton) v.findViewById(R.id.addItemFab);
@@ -154,9 +181,8 @@ public class SingleItemActivity extends Fragment {
     }
 
     private void parseArguments(){
-        String itemId = getArguments().getString("itemId");
-        String dataTable = getArguments().getString("dataTable");
-        Log.i(TAG, itemId);
+        itemId = getArguments().getString("itemId");
+        dataTable = getArguments().getString("dataTable");
         if (itemId != null) {
             new LoadSingleItem(this, mContext).execute(itemId, dataTable);
         }
@@ -169,8 +195,6 @@ public class SingleItemActivity extends Fragment {
                 try {
                     JSONArray jsonArray = new JSONArray(res);
                     JSONObject jsonObject = jsonArray.getJSONObject(0);
-                    itemId = jsonObject.getString("ITEM_ID");
-                    dataTable = jsonObject.getString("DATA_TABLE");
                     itemName = jsonObject.getString("ITEM_NAME");
                     restaurantAddress = jsonObject.getString("ADDRESS");
                     restaurantName = jsonObject.getString("COMPANY_NAME");
@@ -195,8 +219,6 @@ public class SingleItemActivity extends Fragment {
         itemNameView.setText(itemName);
         new LoadImages(itemImageView).execute(itemImage);
         restaurantNameView.setText(restaurantName);
-        restPhoneView.setText(restPhone);
-        restUrlView.setText(restUrl);
         itemDescriptionView.setText(itemDescription);
         progressBar.setProgress(0);
         progressBar.setVisibility(View.INVISIBLE);

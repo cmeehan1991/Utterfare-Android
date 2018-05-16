@@ -3,10 +3,7 @@ package com.cbmwebdevelopment.utterfare.main;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -44,8 +41,7 @@ public class MainActivity extends AppCompatActivity{
         // up navigation.
         getSupportFragmentManager().addOnBackStackChangedListener(()->{
             boolean hasItems = getSupportFragmentManager().getBackStackEntryCount() > 0;
-            Log.i(TAG, String.valueOf(mFragmentTabHost.getCurrentTab()));
-            //getActionBar().setDisplayHomeAsUpEnabled(true);
+
             this.getSupportActionBar().setDisplayHomeAsUpEnabled(hasItems);
         });
     }

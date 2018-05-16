@@ -37,7 +37,7 @@ public class UpdateUserInformationModel extends AsyncTask<String, Void, String> 
             data += "&" + URLEncoder.encode("last_name", "UTF-8") + "=" + URLEncoder.encode(lastName, "UTF-8");
             data += "&" + URLEncoder.encode("city", "UTF-8") + "=" + URLEncoder.encode(city, "UTF-8");
             data += "&" + URLEncoder.encode("state", "UTF-8") + "=" + URLEncoder.encode(state, "UTF-8");
-            data += "&" + URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8");
+            data += "&" + URLEncoder.encode("email_address", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8");
 
             // Establish a connection
             URL url = new URL(link);

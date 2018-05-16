@@ -44,6 +44,12 @@ public class UserLoginActivity extends Fragment {
     private SharedPreferences sharedPreferences;
 
     @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         // Inflate the view
@@ -68,6 +74,12 @@ public class UserLoginActivity extends Fragment {
 
         // Get the shared preferences
         sharedPreferences = mActivity.getSharedPreferences(MainActivity.UF_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+
+        Log.i(TAG, "User Login Activity");
+
+        getFragmentManager().popBackStack();
+
+
 
         // Handle when the clickable elements are clicked
         onClickMethods();

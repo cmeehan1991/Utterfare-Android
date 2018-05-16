@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="First Name"/>
+
+        <EditText
+            android:id="@+id/signup_first_name_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:nextFocusForward="@+id/signup_last_name_edit_text"
+            android:imeOptions="actionNext" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Last Name" />
+
+        <EditText
+            android:id="@+id/signup_last_name_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:nextFocusForward="@+id/signup_city_edit_text"
+            android:imeOptions="actionNext" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="City" />
+
+        <EditText
+            android:id="@+id/signup_city_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPostalAddress"
+            android:nextFocusForward="@+id/signup_state_edit_text"
+            android:imeOptions="actionNext" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="State" />
+
+        <EditText
+            android:id="@+id/signup_state_edi_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPostalAddress"
+            android:nextFocusForward="@+id/signup_email_edit_text"
+            android:imeOptions="actionNext" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email Address" />
+
+        <EditText
+            android:id="@+id/signup_email_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:nextFocusForward="@+id/signup_password_edit_text"
+            android:imeOptions="actionNext" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Password" />
+
+        <EditText
+            android:id="@+id/signup_password_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:nextFocusForward="@+id/signup_confirm_password_edit_text"
+            android:imeOptions="actionNext"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="asdfjk;"
+            style="@style/InputNotificationStyle"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/"
+            android:text="Confirm Password" />
+
+        <EditText
+            android:id="@+id/signup_confirm_password_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:imeOptions="actionGo"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/PrimaryButton"
+            android:text="Sign Up"
+            android:id="@+id/sign_up_button"/>
+    </LinearLayout>
+
+</ScrollView>
