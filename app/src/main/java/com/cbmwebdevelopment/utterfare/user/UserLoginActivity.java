@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.cbmwebdevelopment.utterfare.main.MainActivity;
+import com.cbmwebdevelopment.utterfare.newuser.NewUserActivity;
 import com.cbmwebdevelopment.utterfare.saved.SavedItemsActivity;
 import com.cbmwebdevelopment.utterfare.search.SearchActivity;
 
@@ -98,7 +99,7 @@ public class UserLoginActivity extends Fragment {
 
         // sign up edit text clicked
         signUpTextView.setOnClickListener((l)->{
-        signUp(v);
+            signUp(v);
         });
     }
 
@@ -107,7 +108,14 @@ public class UserLoginActivity extends Fragment {
      * @param view
      */
     private void signUp(View view){
-
+        NewUserActivity newUserActivity = new NewUserActivity();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager
+                .beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .replace(android.R.id.tabcontent, newUserActivity)
+                .addToBackStack(null)
+                .commit();
     }
 
     /**

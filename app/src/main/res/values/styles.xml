@@ -56,5 +56,6 @@
 
     <style name="InputNotificationStyle">
         <item name="android:textSize">10dp</item>
+        <item name="android:textColor">#FF0000</item>
     </style>
 </resources>

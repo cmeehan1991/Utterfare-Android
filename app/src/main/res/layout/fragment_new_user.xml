@@ -54,11 +54,23 @@
             android:layout_height="wrap_content"
             android:text="State" />
 
-        <EditText
-            android:id="@+id/signup_state_edi_text"
+        <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPostalAddress"
+            android:id="@+id/signup_state_spinner"
+            android:entries="@array/states_array"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Phone Number" />
+
+        <EditText
+            android:id="@+id/signup_phone_number_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:digits="0123456789+"
             android:nextFocusForward="@+id/signup_email_edit_text"
             android:imeOptions="actionNext" />
 
@@ -92,28 +104,42 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="asdfjk;"
-            style="@style/InputNotificationStyle"/>
+            android:text="Password must be at least 8 characters long."
+            android:id="@+id/password_message_text_view"
+            style="@style/InputNotificationStyle"
+            android:visibility="invisible"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/"
-            android:text="Confirm Password" />
+            android:text="Confirm Password"
+            android:id="@+id/confirm_password_text_view"
+            android:visibility="invisible"/>
 
         <EditText
             android:id="@+id/signup_confirm_password_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:imeOptions="actionGo"/>
+            android:imeOptions="actionGo"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Passwords do not match"
+            android:id="@+id/confirm_password_message_text_view"
+            style="@style/InputNotificationStyle"
+            android:visibility="invisible"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/PrimaryButton"
             android:text="Sign Up"
-            android:id="@+id/sign_up_button"/>
+            android:id="@+id/sign_up_button"
+            android:enabled="false"
+            android:visibility="invisible"/>
     </LinearLayout>
 
 </ScrollView>
