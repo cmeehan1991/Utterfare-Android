@@ -1,11 +1,13 @@
 package com.cbmwebdevelopment.utterfare.passwordreset;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +27,7 @@ import cbmwebdevelopment.utterfare.R;
  * Connor.Meehan@cbmwebdevelopment.com
  */
 public class PasswordResetCodeActivity extends Fragment {
-
+    private final String TAG = getClass().getName();
     private View v;
     private Context mContext;
     private Activity mActivity;
@@ -36,7 +38,7 @@ public class PasswordResetCodeActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         mContext = getContext();
-        v = inflater.inflate(R.layout.fragment_password_reset_request, container, false);
+        v = inflater.inflate(R.layout.fragment_password_reset_code, container, false);
         return v;
     }
 
@@ -49,9 +51,10 @@ public class PasswordResetCodeActivity extends Fragment {
     }
 
     private void initializeView(){
+        mSharedPreferences = mActivity.getSharedPreferences("", mContext.MODE_PRIVATE);
         passwordResetCodeEditText = (EditText) v.findViewById(R.id.password_reset_code);
-        submitCodeButton = (Button) v.findViewById(R.id.submit_code_button);
-
+        submitCodeButton = (Button) v.findViewById(R.id.submit_reset_code_button);
+        Log.i(TAG, String.valueOf(submitCodeButton));
         // Add click listeners
         setClickListeners();
     }
@@ -86,7 +89,10 @@ public class PasswordResetCodeActivity extends Fragment {
     private void goToResetFragment(){
         PasswordResetFragment passwordResetFragment = new PasswordResetFragment();
         FragmentManager manager = getFragmentManager();
-
+        manager.beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .replace(android.R.id.tabcontent, passwordResetFragment)
+                .commit();
     }
 
 }

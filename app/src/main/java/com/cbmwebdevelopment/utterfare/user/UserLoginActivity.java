@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.cbmwebdevelopment.utterfare.main.MainActivity;
 import com.cbmwebdevelopment.utterfare.newuser.NewUserActivity;
+import com.cbmwebdevelopment.utterfare.passwordreset.RequestPasswordResetActivity;
 import com.cbmwebdevelopment.utterfare.saved.SavedItemsActivity;
 import com.cbmwebdevelopment.utterfare.search.SearchActivity;
 
@@ -123,7 +124,13 @@ public class UserLoginActivity extends Fragment {
      * @param view
      */
     private void resetPassword(View view){
-
+        RequestPasswordResetActivity requestPasswordResetActivity = new RequestPasswordResetActivity();
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .replace(android.R.id.tabcontent, requestPasswordResetActivity)
+                .addToBackStack(null)
+                .commit();
     }
 
     /**

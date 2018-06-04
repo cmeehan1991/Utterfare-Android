@@ -7,8 +7,8 @@ android {
         applicationId "com.cbmwebdevelopment.utterfare"
         minSdkVersion 23
         targetSdkVersion 27
-        versionCode 3
-        versionName "2.1"
+        versionCode 4
+        versionName "2.2"
         //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         compileOptions{

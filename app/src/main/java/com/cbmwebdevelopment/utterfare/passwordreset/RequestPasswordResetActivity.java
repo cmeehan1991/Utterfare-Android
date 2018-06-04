@@ -2,6 +2,7 @@ package com.cbmwebdevelopment.utterfare.passwordreset;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -33,6 +34,7 @@ public class RequestPasswordResetActivity extends Fragment {
     private Activity mActivity;
     private EditText emailEditText;
     private Button requestPasswordButton;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -49,6 +51,7 @@ public class RequestPasswordResetActivity extends Fragment {
     }
 
     private void initItems(){
+        mSharedPreferences = mActivity.getSharedPreferences("", mContext.MODE_PRIVATE);
         emailEditText = (EditText) v.findViewById(R.id.recover_pwd_email_address);
         requestPasswordButton = (Button) v.findViewById(R.id.request_code_button);
 
@@ -84,6 +87,7 @@ public class RequestPasswordResetActivity extends Fragment {
         String email = emailEditText.getText().toString();
         if(email != null && !email.trim().isEmpty() && email.contains("@")){
             requestCode(email);
+            mSharedPreferences.edit().putString("USERNAME", email).commit();
         }
     }
 
