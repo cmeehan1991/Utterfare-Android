@@ -40,7 +40,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.75"
-                        android:onClick="openMap"
                         style="@style/ItemLink"
                         android:textSize="16dip" />
                 </LinearLayout>

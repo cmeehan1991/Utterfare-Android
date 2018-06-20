@@ -105,32 +105,23 @@ public class Search extends AsyncTask<String, String, String> {
     protected void onPostExecute(String result) {
         // Get the current class so we can determine how to proceed
         String currentClass = CONTEXT.getClass().toString();
+
         // Check for results.
         // If there aren't any results then we are going to handle that.
-        Log.i(TAG, result);
         if(result.equals("No Results") || result.isEmpty() || result.equals("<br />")){
 
             // Ask the user to try a different search.
             if(currentClass.contains("MainActivity")){
                 Toast.makeText(CONTEXT, "No results. Try a different search.", Toast.LENGTH_SHORT).show();
-                //ProgressBar progressBar = ((SearchActivity) CONTEXT).progressBar;
-                //progressBar.setVisibility(View.INVISIBLE);
-                //progressBar.setProgress(0);
             }else{
                 // This is for the feed only.
                 Toast.makeText(CONTEXT, "End of feed.", Toast.LENGTH_SHORT).show();
             }
         }else {
             // If we are running a new search from the search activity
-            if (currentClass.contains("MainActivity")) {
+            if (Integer.parseInt(offset) == 0) {
 
                 if(!result.isEmpty()) {
-
-                    // Hide the progress bar
-                    //ProgressBar progressBar = ((SearchActivity) CONTEXT).progressBar;
-                    //progressBar.setVisibility(View.INVISIBLE);
-                    //progressBar.setProgress(0);
-
                     // Get the results activity, which is where we are heading next.
                     ResultsActivity resultsActivity = new ResultsActivity();
 

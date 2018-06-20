@@ -45,8 +45,8 @@ public class ResultsActivity extends Fragment implements RecyclerView.OnScrollCh
     public int offset, page;
     public String searchTerms, location, distance;
     public String results;
-    private List<ResultItems> resultItemsList;
-    private RecyclerView recyclerView;
+    public List<ResultItems> resultItemsList;
+    public RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.Adapter adapter;
     public static ProgressBar progressBar;
@@ -131,39 +131,8 @@ public class ResultsActivity extends Fragment implements RecyclerView.OnScrollCh
      * @throws IOException
      */
     public void showItems(String res) {
-        ExecutorService executor = Executors.newCachedThreadPool();
-        executor.submit(() -> {
-            try {
-                // Get the result and convert it into a JSON Array
-                JSONArray jsonArray = new JSONArray(res);
-
-                // Each JSON element is an array of values returned from the server.
-                // We are going to loop through each of them and assign the individual value to it's
-                // respective variable.
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    ResultItems resultItems = new ResultItems();
-                    JSONObject jsonObj = null;
-                    try {
-                        jsonObj = jsonArray.getJSONObject(i); // Convert each array to an JSON object
-                        resultItems.setItemId(jsonObj.getString("ITEM_ID"));
-                        resultItems.setDataTable(jsonObj.getString("DATA_TABLE"));
-                        resultItems.setCompanyId(jsonObj.getString("COMPANY_ID"));
-                        resultItems.setCompanyName(jsonObj.getString("COMPANY"));
-                        resultItems.setItemImage(jsonObj.getString("IMAGE_URL"));
-                        resultItems.setItemName(jsonObj.getString("NAME"));
-                    } catch (JSONException ex) {
-                        Log.e(TAG, "JSON Exception: " + ex.getMessage());
-                    }
-
-                    resultItemsList.add(resultItems);
-                }
-            } catch (JSONException ex) {
-                Log.e(TAG, "JSON Exception: " + ex.getMessage());
-            }
-            adapter.notifyDataSetChanged();
-            executor.shutdown();
-        });
-
+        UpdateResultsAdapter updateResultsAdapter = new UpdateResultsAdapter(resultItemsList, adapter);
+        updateResultsAdapter.execute(res);
     }
 
     private boolean isLastItemDisplaying(RecyclerView recyclerView) {

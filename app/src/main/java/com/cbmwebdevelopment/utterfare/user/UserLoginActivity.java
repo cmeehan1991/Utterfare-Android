@@ -48,6 +48,7 @@ public class UserLoginActivity extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(false);
     }
 
 
@@ -76,13 +77,6 @@ public class UserLoginActivity extends Fragment {
 
         // Get the shared preferences
         sharedPreferences = mActivity.getSharedPreferences(MainActivity.UF_SHARED_PREFERENCES, Context.MODE_PRIVATE);
-
-        Log.i(TAG, "User Login Activity");
-
-        getFragmentManager().popBackStack();
-
-
-
         // Handle when the clickable elements are clicked
         onClickMethods();
     }

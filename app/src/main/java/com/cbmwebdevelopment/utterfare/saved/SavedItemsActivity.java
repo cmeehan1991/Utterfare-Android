@@ -53,29 +53,16 @@ public class SavedItemsActivity extends Fragment{
     private RecyclerView.Adapter adapter;
     private ProgressBar progressBar;
     private List<SavedItems> itemsList;
-
+    private boolean isLoggedIn;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
         sharedPreferences = getActivity().getSharedPreferences(UF_SHARED_PREFERENCES, getContext().MODE_PRIVATE);
-        boolean isLoggedIn = sharedPreferences.getBoolean("LOGGED_IN", false);
+        isLoggedIn = sharedPreferences.getBoolean("LOGGED_IN", false);
 
-        if(!isLoggedIn){
-            Log.i(TAG, "Not Logged In");
-            UserLoginActivity userLoginActivity = new UserLoginActivity();
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .replace(android.R.id.tabcontent, userLoginActivity);
-            fragmentManager.popBackStack();
-            fragmentTransaction.commit();
-        }
-
-        setHasOptionsMenu(true);
-
+        setHasOptionsMenu(isLoggedIn);
     }
 
     @Override
@@ -92,6 +79,17 @@ public class SavedItemsActivity extends Fragment{
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         mActivity = getActivity();
+
+        if(!isLoggedIn){
+            setHasOptionsMenu(false);
+            UserLoginActivity userLoginActivity = new UserLoginActivity();
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_NONE)
+                    .replace(android.R.id.tabcontent, userLoginActivity);
+            fragmentTransaction.commit();
+        }
+
         initializeView();
     }
 

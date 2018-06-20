@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -94,15 +95,17 @@ public class SingleItemActivity extends Fragment {
      * Items handled: Add Item Floating Action Button
      */
     private void handleActionItems() {
+
+        restaurantNameView.setOnClickListener(l -> {
+            openMap(v);
+        });
+
         addItemFab.setOnClickListener((l) -> {
             boolean isLoggedIn = sharedPreferences.getBoolean("LOGGED_IN", false);
             if (isLoggedIn) {
                 addItem();
             } else {
-                UserLoginActivity userLoginActivity = new UserLoginActivity();
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction().setTransition(TRANSIT_FRAGMENT_OPEN).replace(android.R.id.tabcontent, userLoginActivity);
-                transaction.commit();
+                Toast.makeText(mContext, "You must be signed in to save items", Toast.LENGTH_LONG).show();
             }
         });
 
