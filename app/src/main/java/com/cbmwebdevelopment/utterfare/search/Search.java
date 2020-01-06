@@ -1,16 +1,16 @@
 package com.cbmwebdevelopment.utterfare.search;
 
 import android.annotation.TargetApi;
-import android.support.v4.app.FragmentActivity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.cbmwebdevelopment.utterfare.results.ResultsActivity;
 

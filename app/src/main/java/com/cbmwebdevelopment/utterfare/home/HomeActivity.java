@@ -3,17 +3,18 @@ package com.cbmwebdevelopment.utterfare.home;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cbmwebdevelopment.utterfare.main.MainActivity;
-import com.cbmwebdevelopment.utterfare.results.ResultAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,9 +22,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import cbmwebdevelopment.utterfare.R;
+
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 /**
  * Created by Connor Meehan on 2020-01-03.
@@ -39,6 +42,8 @@ public class HomeActivity extends Fragment {
     public List<HomeItems> topPicksList, localPicksList, personalizedPicksList;
     private RecyclerView.Adapter topItemsAdapter, localItemsAdapter, personalizedItemsAdapter;
     private RecyclerView.LayoutManager topPicksLayoutManager, localPicksLayoutManager, personalizedPicksLayoutManager;
+    private ProgressBar homeProgressBar;
+    private LinearLayout homeContentLayout;
     private ViewGroup container;
     private String lat, lng;
     private HomeItemsController topItemsController, localItemsController, personalizedItemsController;
@@ -48,7 +53,6 @@ public class HomeActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstance){
         super.onCreate(savedInstance);
-
 
         v = layoutInflater.inflate(R.layout.activity_home, container, false);
 
@@ -74,9 +78,13 @@ public class HomeActivity extends Fragment {
         localPicksRV = (RecyclerView) v.findViewById(R.id.local_picks_rv);
         personalizedPicksRV = (RecyclerView) v.findViewById(R.id.personalized_picks_rv);
 
-        topPicksLayoutManager = new LinearLayoutManager(v.getContext(), LinearLayout.HORIZONTAL, false);
-        localPicksLayoutManager = new LinearLayoutManager(v.getContext(), LinearLayout.HORIZONTAL, false);
-        personalizedPicksLayoutManager = new LinearLayoutManager(v.getContext(), LinearLayout.HORIZONTAL, false);
+        homeContentLayout = (LinearLayout)v.findViewById(R.id.home_content_layout);
+        homeProgressBar = (ProgressBar) v.findViewById(R.id.home_progress_bar);
+
+
+        topPicksLayoutManager = new LinearLayoutManager(v.getContext(), RecyclerView.HORIZONTAL, false);
+        localPicksLayoutManager = new LinearLayoutManager(v.getContext(), RecyclerView.HORIZONTAL, false);
+        personalizedPicksLayoutManager = new LinearLayoutManager(v.getContext(), RecyclerView.HORIZONTAL, false);
 
         topPicksRV.setLayoutManager(topPicksLayoutManager);
         localPicksRV.setLayoutManager(localPicksLayoutManager);
@@ -130,6 +138,8 @@ public class HomeActivity extends Fragment {
                     break;
                 case "get_recommendations":
                     personalizedItemsAdapter.notifyDataSetChanged();
+                    homeProgressBar.setVisibility(GONE);
+                    homeContentLayout.setVisibility(VISIBLE);
                     break;
                 default:break;
             }

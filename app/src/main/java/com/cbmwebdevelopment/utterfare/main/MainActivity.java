@@ -1,43 +1,39 @@
 package com.cbmwebdevelopment.utterfare.main;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentTabHost;
-import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TabHost;
+import android.view.ViewGroup;
 
-import com.cbmwebdevelopment.utterfare.home.HomeActivity;
-import com.cbmwebdevelopment.utterfare.saved.SavedItemsActivity;
-import com.cbmwebdevelopment.utterfare.search.SearchActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import cbmwebdevelopment.utterfare.R;
 
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
-    private FragmentTabHost mFragmentTabHost;
+
     private final String TAG = this.getClass().getName();
     public static final String UF_SHARED_PREFERENCES = "UF_SHARED_PREFERENCES";
     public SharedPreferences sharedPreferences;
     protected LocationManager locationManager;
-    protected LocationListener locationListener;
     public static String lat, lng;
-    public FloatingActionButton homeButton, searchButton, savedButton, profileButton;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -53,39 +49,29 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
 
-
         // Listen for additional fragments added to the stack to add
         // up navigation.
-        getSupportFragmentManager().addOnBackStackChangedListener(()->{
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             boolean hasItems = getSupportFragmentManager().getBackStackEntryCount() > 0;
             this.getSupportActionBar().setDisplayHomeAsUpEnabled(hasItems);
         });
 
     }
-
     private void initViews(String lat, String lng){
 
-        // Initialize the fragment tab host
-        mFragmentTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-        mFragmentTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment pager = new ViewPagerActivity();
 
-        // Add the tabs
-        Bundle bundle = new Bundle();
-        bundle.putString("lat", lat);
-        bundle.putString("lng", lng);
+        FragmentTransaction ft = fragmentManager.beginTransaction();
 
-
-        mFragmentTabHost.addTab(getTabSpec(mFragmentTabHost,"Home", null, getResources().getDrawable(R.drawable.ic_home)), HomeActivity.class, bundle);
-        mFragmentTabHost.addTab(getTabSpec(mFragmentTabHost, "Search", null, getResources().getDrawable(R.drawable.ic_search_dark)), SearchActivity.class, bundle);
-        mFragmentTabHost.addTab(getTabSpec(mFragmentTabHost, "Favorites", null, getResources().getDrawable(R.drawable.ic_favorites)), SavedItemsActivity.class, null);
-        mFragmentTabHost.getTabWidget().setStripEnabled(false);
+        ft.add(R.id.switch_fragment, pager, "Pager");
+        ft.commit();
 
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
-        mFragmentTabHost = null;
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
@@ -98,9 +84,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
-    private TabHost.TabSpec getTabSpec(TabHost tabHost, String tabTitle, String tabIndicator, Drawable drawable){
-        return tabHost.newTabSpec(tabTitle).setIndicator(tabIndicator,drawable);
-    }
 
     @Override
     public void onLocationChanged(Location location) {

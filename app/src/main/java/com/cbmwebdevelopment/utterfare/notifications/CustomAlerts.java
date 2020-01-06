@@ -1,7 +1,7 @@
 package com.cbmwebdevelopment.utterfare.notifications;
 
 import android.app.Activity;
-import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
 
 /**
  * Created by Connor Meehan on 5/18/18.

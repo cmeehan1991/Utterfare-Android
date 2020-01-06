@@ -4,15 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.cbmwebdevelopment.utterfare.notifications.CustomAlerts;
 import com.cbmwebdevelopment.utterfare.saved.SavedItemsActivity;
@@ -29,7 +30,7 @@ import cbmwebdevelopment.utterfare.R;
  * CBM Web Development
  * Connor.Meehan@cbmwebdevelopment.com
  */
-public class PasswordResetFragment extends Fragment{
+public class PasswordResetFragment extends Fragment {
     private final String TAG = getClass().getName();
     private Activity mActivity;
     private Context mContext;

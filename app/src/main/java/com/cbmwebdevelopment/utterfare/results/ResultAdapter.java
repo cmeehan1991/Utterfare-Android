@@ -1,20 +1,20 @@
 package com.cbmwebdevelopment.utterfare.results;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.cbmwebdevelopment.utterfare.single.SingleItemActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.cbmwebdevelopment.utterfare.images.LoadImages;
+import com.cbmwebdevelopment.utterfare.single.SingleItemActivity;
 
 import java.util.List;
 

@@ -1,11 +1,7 @@
 package com.cbmwebdevelopment.utterfare.single;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import java.io.BufferedReader;

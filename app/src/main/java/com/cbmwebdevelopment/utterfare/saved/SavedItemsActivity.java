@@ -4,13 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTabHost;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,9 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTabHost;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.cbmwebdevelopment.utterfare.profile.UserProfileActivity;
-import com.cbmwebdevelopment.utterfare.results.ResultAdapter;
 import com.cbmwebdevelopment.utterfare.user.UserLoginActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,7 +42,7 @@ import static com.cbmwebdevelopment.utterfare.main.MainActivity.UF_SHARED_PREFER
  * CBM Web Development
  * Connor.Meehan@cbmwebdevelopment.com
  */
-public class SavedItemsActivity extends Fragment{
+public class SavedItemsActivity extends Fragment {
     private View v;
     public SharedPreferences sharedPreferences;
     private String TAG = this.getClass().getName();
@@ -82,12 +82,12 @@ public class SavedItemsActivity extends Fragment{
 
         if(!isLoggedIn){
             setHasOptionsMenu(false);
-            UserLoginActivity userLoginActivity = new UserLoginActivity();
-            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_NONE)
-                    .replace(android.R.id.tabcontent, userLoginActivity);
-            fragmentTransaction.commit();
+            //UserLoginActivity userLoginActivity = new UserLoginActivity();
+            //FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction()
+            //        .setTransition(FragmentTransaction.TRANSIT_NONE)
+            //        .replace(android.R.id.tabcontent, userLoginActivity);
+            //fragmentTransaction.commit();
         }
 
         initializeView();
