@@ -22,8 +22,8 @@
                     android:id="@+id/single_item_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="18dp"
-                    android:textAlignment="center"/>
+                    android:textAlignment="center"
+                    android:textSize="18dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -37,10 +37,10 @@
 
                     <TextView
                         android:id="@+id/single_item_restaurant_name"
+                        style="@style/ItemLink"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.75"
-                        style="@style/ItemLink"
                         android:textSize="16dip" />
                 </LinearLayout>
 
@@ -55,17 +55,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"/>
+                    android:layout_marginRight="25dp" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
 
     <ProgressBar
+        android:id="@+id/singleItemProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:id="@+id/singleItemProgressBar"/>
+        android:layout_centerInParent="true" />
 
+    <!--
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,15 +74,15 @@
         android:layout_alignParentRight="true"
         android:layout_margin="10dp"
         android:src="@drawable/ic_favorites"
-        android:id="@+id/addItemFab"/>
+        android:id="@+id/addItemFab"/>-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/addItemFab"
+        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="10dp"
         android:src="@drawable/ic_phone"
-        android:tint="@android:color/white"
-        android:id="@+id/phone"/>
+        android:tint="@android:color/white" />
 </RelativeLayout>

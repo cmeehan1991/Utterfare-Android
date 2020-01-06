@@ -93,6 +93,7 @@ public class SingleItemActivity extends Fragment {
             openMap(v);
         });
 
+        /*
         addItemFab.setOnClickListener((l) -> {
             boolean isLoggedIn = sharedPreferences.getBoolean("LOGGED_IN", false);
             if (isLoggedIn) {
@@ -101,7 +102,7 @@ public class SingleItemActivity extends Fragment {
                 Toast.makeText(mContext, "You must be signed in to save items", Toast.LENGTH_LONG).show();
             }
         });
-
+        */
         phoneButton.setOnClickListener((l) -> {
             Intent intent = new Intent(Intent.ACTION_CALL);
             intent.setData(Uri.parse("tel:" + restPhone));
@@ -155,7 +156,7 @@ public class SingleItemActivity extends Fragment {
         phoneButton = (FloatingActionButton) v.findViewById(R.id.phone);
         itemDescriptionView = (TextView) v.findViewById(R.id.single_item_description);
         progressBar = (ProgressBar) v.findViewById(R.id.singleItemProgressBar);
-        addItemFab = (FloatingActionButton) v.findViewById(R.id.addItemFab);
+        //addItemFab = (FloatingActionButton) v.findViewById(R.id.addItemFab);
 
 
     }

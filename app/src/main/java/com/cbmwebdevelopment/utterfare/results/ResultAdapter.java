@@ -54,7 +54,6 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
         holder.itemView.setOnClickListener((listener)->{
             Bundle bundle = new Bundle();
             bundle.putString("itemId", resultItems.getItemId());
-            bundle.putString("dataTable", resultItems.getDataTable());
 
             goToSingleItemView(bundle);
 
@@ -63,6 +62,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
         holder.itemName.setText(resultItems.getItemName());
         new LoadImages((ImageView) holder.itemView.findViewById(R.id.item_image)).execute(resultItems.getItemImage());
         holder.itemRestaurantName.setText(resultItems.getCompanyName());
+        holder.itemShortDescription.setText(resultItems.getItemShortDescription());
     }
     private void goToSingleItemView(Bundle bundle){
         SingleItemActivity singleItemActivity = new SingleItemActivity();
@@ -74,7 +74,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
-        fragmentTransaction.replace(android.R.id.tabcontent, singleItemActivity);
+        fragmentTransaction.replace(R.id.switch_fragment, singleItemActivity);
 
 
         fragmentTransaction.addToBackStack("Search");
@@ -86,7 +86,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView itemName, itemDescription,  phone, url, itemRestaurantName;
+        public TextView itemName, itemShortDescription,  phone, url, itemRestaurantName;
         public ImageView itemImage;
 
         public ViewHolder(View itemView) {
@@ -94,6 +94,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
             itemName = (TextView) itemView.findViewById(R.id.item_name);
             itemImage = (ImageView) itemView.findViewById(R.id.item_image);
             itemRestaurantName = (TextView) itemView.findViewById(R.id.item_restaurant_name);
+            itemShortDescription = (TextView) itemView.findViewById(R.id.item_short_description);
         }
     }
 }

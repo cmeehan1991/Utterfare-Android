@@ -7,7 +7,7 @@ package com.cbmwebdevelopment.utterfare.results;
  */
 
 public class ResultItems {
-    private String itemId, dataTable, companyName, companyId, itemImage, itemName;
+    private String itemId, dataTable, companyName, companyId, itemImage, itemName, itemShortDescription;
 
     public String getItemId() {
         return itemId;
@@ -55,5 +55,13 @@ public class ResultItems {
 
     public void setItemName(String val) {
         this.itemName = val;
+    }
+
+    public String getItemShortDescription(){
+        return this.itemShortDescription;
+    }
+
+    public void setItemShortDescription(String val){
+        this.itemShortDescription = val;
     }
 }

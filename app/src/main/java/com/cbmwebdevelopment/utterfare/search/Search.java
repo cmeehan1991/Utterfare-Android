@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -20,6 +21,8 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+
+import cbmwebdevelopment.utterfare.R;
 
 /**
  * Created by cmeehan on 12/5/16.
@@ -50,7 +53,7 @@ public class Search extends AsyncTask<String, String, String> {
         page = args[4];
 
         String limit = "10"; // Always limit to 25 per page
-        String link = "https://www.utterfare.com/includes/php/android-search.php";
+        String link = "https://www.utterfare.com/includes/php/search.php";
         try {
             // The data to be passed to the android-search.php file
             String data = URLEncoder.encode("terms", "UTF-8") + "=" + URLEncoder.encode(terms, "UTF-8");
@@ -59,7 +62,10 @@ public class Search extends AsyncTask<String, String, String> {
             data += "&" + URLEncoder.encode("limit", "UTF-8") + "=" + URLEncoder.encode(limit, "UTF-8");
             data += "&" + URLEncoder.encode("offset", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(offset), "UTF-8");
             data += "&" + URLEncoder.encode("page", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(page), "UTF-8");
+            data += "&" + URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode("search", "UTF-8");
 
+
+            Log.i(TAG, data);
 
             // Establish and open the connection with the URL
             URL url = new URL(link);
@@ -105,7 +111,7 @@ public class Search extends AsyncTask<String, String, String> {
     protected void onPostExecute(String result) {
         // Get the current class so we can determine how to proceed
         String currentClass = CONTEXT.getClass().toString();
-
+        Log.i(TAG, result);
         // Check for results.
         // If there aren't any results then we are going to handle that.
         if(result.equals("No Results") || result.isEmpty() || result.equals("<br />")){
@@ -141,7 +147,7 @@ public class Search extends AsyncTask<String, String, String> {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
-                    fragmentTransaction.replace(android.R.id.tabcontent, resultsActivity);
+                    fragmentTransaction.replace(R.id.switch_fragment, resultsActivity);
 
 
                     fragmentTransaction.addToBackStack("Search");

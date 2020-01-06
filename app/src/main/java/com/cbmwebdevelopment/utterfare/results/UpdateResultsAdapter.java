@@ -43,12 +43,12 @@ public class UpdateResultsAdapter extends AsyncTask<String, Void, Boolean> {
                 JSONObject jsonObj = null;
                 try {
                     jsonObj = jsonArray.getJSONObject(i); // Convert each array to an JSON object
-                    resultItems.setItemId(jsonObj.getString("ITEM_ID"));
-                    resultItems.setDataTable(jsonObj.getString("DATA_TABLE"));
-                    resultItems.setCompanyId(jsonObj.getString("COMPANY_ID"));
-                    resultItems.setCompanyName(jsonObj.getString("COMPANY"));
-                    resultItems.setItemImage(jsonObj.getString("IMAGE_URL"));
-                    resultItems.setItemName(jsonObj.getString("NAME"));
+                    resultItems.setItemId(jsonObj.getString("item_id"));
+                    resultItems.setCompanyId(jsonObj.getString("vendor_id"));
+                    resultItems.setCompanyName(jsonObj.getString("vendor_name"));
+                    resultItems.setItemImage(jsonObj.getString("primary_image"));
+                    resultItems.setItemName(jsonObj.getString("item_name"));
+                    resultItems.setItemShortDescription(jsonObj.getString("item_short_description"));
                 } catch (JSONException ex) {
                     Log.e(TAG, "JSON Exception: " + ex.getMessage());
                 }

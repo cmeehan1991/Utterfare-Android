@@ -232,12 +232,14 @@ public class SearchActivity extends Fragment implements GoogleApiClient.Connecti
      * @param view
      */
     public void submitSearch(View view) {
+        /*
         if (latitude == null || longitude == null) {
             location = parseLocation(locationButton.getText().toString());
         } else {
             location = String.valueOf(latitude) + ":" + String.valueOf(longitude);
         }
-
+        */
+        location = locationButton.getText().toString();
         // Hide the keyboard
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
