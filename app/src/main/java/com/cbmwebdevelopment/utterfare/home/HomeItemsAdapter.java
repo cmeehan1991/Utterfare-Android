@@ -1,6 +1,8 @@
 package com.cbmwebdevelopment.utterfare.home;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +11,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cbmwebdevelopment.utterfare.images.LoadImages;
+import com.cbmwebdevelopment.utterfare.single.SingleItemActivity;
 
 import java.util.List;
 
@@ -43,6 +49,7 @@ public class HomeItemsAdapter extends RecyclerView.Adapter<HomeItemsAdapter.View
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.home_feed_recycler_item, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(v);
 
+
         return viewHolder;
     }
 
@@ -53,6 +60,35 @@ public class HomeItemsAdapter extends RecyclerView.Adapter<HomeItemsAdapter.View
 
         viewHolder.itemName.setText(homeItems.getItemName());
         new LoadImages((ImageView) viewHolder.itemView.findViewById(R.id.home_item_photo)).execute(homeItems.getItemImageUrl());
+
+        viewHolder.cardView.setOnClickListener((listener)->{
+            Bundle bundle = new Bundle();
+            bundle.putString("itemId", homeItems.getItemId());
+
+            Log.i(TAG, homeItems.getItemName());
+            Log.i(TAG, homeItems.getItemId());
+
+            goToSingleItemView(bundle);
+        });
+    }
+
+    private void goToSingleItemView(Bundle bundle){
+        SingleItemActivity singleItemActivity = new SingleItemActivity();
+        singleItemActivity.setArguments(bundle);
+
+        FragmentActivity fragmentActivity = (FragmentActivity) context;
+
+        FragmentManager fm = fragmentActivity.getSupportFragmentManager();
+
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+
+        ft.replace(R.id.switch_fragment, singleItemActivity);
+
+        ft.addToBackStack("Home");
+        ft.commit();
+
+
     }
 
     @Override

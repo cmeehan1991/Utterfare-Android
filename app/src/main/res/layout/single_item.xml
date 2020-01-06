@@ -48,30 +48,7 @@
                     android:id="@+id/single_item_image"
                     android:layout_width="match_parent"
                     android:layout_height="300dip" />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp">
 
-                    <Button
-                        style="@style/ContactButton"
-                        android:id="@+id/single_item_phone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:text="Call Now"
-                        android:autoLink="phone" />
-
-                    <Button
-                        style="@style/ContactButton"
-                        android:id="@+id/single_item_link"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:text="Visit Website"
-                        android:autoLink="web" />
-                </LinearLayout>
 
                 <TextView
                     android:id="@+id/single_item_description"
@@ -84,13 +61,12 @@
     </LinearLayout>
 
     <ProgressBar
-        android:layout_width="72dip"
-        android:layout_height="72dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:id="@+id/singleItemProgressBar"
-        android:indeterminateDrawable="@drawable/progress"/>
+        android:id="@+id/singleItemProgressBar"/>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -98,4 +74,14 @@
         android:layout_margin="10dp"
         android:src="@drawable/ic_favorites"
         android:id="@+id/addItemFab"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/addItemFab"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:src="@drawable/ic_phone"
+        android:tint="@android:color/white"
+        android:id="@+id/phone"/>
 </RelativeLayout>

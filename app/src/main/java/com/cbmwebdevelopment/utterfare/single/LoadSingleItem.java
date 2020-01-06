@@ -19,7 +19,7 @@ import java.net.URLEncoder;
 
 public class LoadSingleItem extends AsyncTask<String, Integer, String> {
     private final SingleItemActivity activity;
-    private final String LINK = "https://www.utterfare.com/includes/php/single-item.php";
+    private final String LINK = "https://www.utterfare.com/includes/php/search.php";
     private final String TAG = this.getClass().getName();
     private final Context CONTEXT;
 
@@ -36,7 +36,7 @@ public class LoadSingleItem extends AsyncTask<String, Integer, String> {
         String result = null;
         try{
             String data = URLEncoder.encode("item_id", "UTF-8") + "=" + URLEncoder.encode(itemId, "UTF-8");
-            data += "&" + URLEncoder.encode("data_table", "UTF-8") + "=" + URLEncoder.encode(dataTable, "UTF-8");
+            data += "&" + URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode("getSingleItem", "UTF-8");
 
             URL url = new URL(LINK);
             URLConnection conn = url.openConnection();

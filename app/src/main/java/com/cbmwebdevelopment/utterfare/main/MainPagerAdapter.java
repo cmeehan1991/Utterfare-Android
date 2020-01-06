@@ -1,7 +1,6 @@
 package com.cbmwebdevelopment.utterfare.main;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +8,9 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.ListFragment;
 
 import com.cbmwebdevelopment.utterfare.home.HomeActivity;
-import com.cbmwebdevelopment.utterfare.saved.SavedItems;
 import com.cbmwebdevelopment.utterfare.saved.SavedItemsActivity;
-import com.cbmwebdevelopment.utterfare.search.Search;
 import com.cbmwebdevelopment.utterfare.search.SearchActivity;
 
 import cbmwebdevelopment.utterfare.R;
@@ -51,13 +47,12 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
             default: return null;
         }
 
-        //return ArrayListFragment.newInstance(i);
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         String title = null;
-        Log.i(TAG, String.valueOf(position));
+
         switch (position) {
             case 0:
                 title = "Home";
@@ -106,7 +101,6 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
             View v = null;
 
-            Log.d(TAG, String.valueOf(mNum));
             switch(mNum){
                 case 0:
                     v = inflater.inflate(R.layout.activity_home, container, false);

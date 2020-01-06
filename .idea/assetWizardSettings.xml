@@ -35,7 +35,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/social/ic_person_outline_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_phone_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -57,7 +57,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="imageAsset" value="$USER_HOME$/Documents/Web Projects/Utterfare/Utterfare/iOS Icons/iconGen_Utterfare Base Logo White - Primary Background_iOS/Utterfare Base Logo White - Primary Background_83pt@2x.png" />
-                                      <entry key="outputName" value="ic_user" />
+                                      <entry key="outputName" value="ic_phone" />
                                     </map>
                                   </option>
                                 </PersistentState>

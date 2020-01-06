@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,7 +24,6 @@ import androidx.fragment.app.Fragment;
 import com.cbmwebdevelopment.utterfare.images.LoadImages;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,6 +33,7 @@ import java.util.concurrent.Executors;
 
 import cbmwebdevelopment.utterfare.R;
 
+import static android.view.View.GONE;
 import static android.widget.Toast.LENGTH_SHORT;
 import static com.cbmwebdevelopment.utterfare.main.MainActivity.UF_SHARED_PREFERENCES;
 import static com.google.android.gms.internal.zzagy.runOnUiThread;
@@ -49,10 +48,9 @@ public class SingleItemActivity extends Fragment {
     private static final int REQUEST_PHONE_CALL = 0;
     private final String TAG = "SingleItemActivity";
     private TextView itemNameView, restaurantNameView, itemDescriptionView;
-    private Button restPhoneView, restUrlView;
     private ImageView itemImageView;
     private ProgressBar progressBar;
-    private FloatingActionButton addItemFab;
+    private FloatingActionButton addItemFab, phoneButton;
     private String itemId, dataTable, itemName, restaurantAddress, restaurantName, restPhone, restUrl, itemDescription, itemImage;
     private View v;
     private Activity mActivity;
@@ -104,7 +102,7 @@ public class SingleItemActivity extends Fragment {
             }
         });
 
-        restPhoneView.setOnClickListener((l) -> {
+        phoneButton.setOnClickListener((l) -> {
             Intent intent = new Intent(Intent.ACTION_CALL);
             intent.setData(Uri.parse("tel:" + restPhone));
 
@@ -114,12 +112,6 @@ public class SingleItemActivity extends Fragment {
             }else{
                 mActivity.startActivity(intent);
             }
-        });
-
-        restUrlView.setOnClickListener((l)->{
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(restUrl));
-            mActivity.startActivity(intent);
         });
     }
 
@@ -160,8 +152,7 @@ public class SingleItemActivity extends Fragment {
         itemNameView = (TextView) v.findViewById(R.id.single_item_name);
         itemImageView = (ImageView) v.findViewById(R.id.single_item_image);
         restaurantNameView = (TextView) v.findViewById(R.id.single_item_restaurant_name);
-        restPhoneView = (Button) v.findViewById(R.id.single_item_phone);
-        restUrlView = (Button) v.findViewById(R.id.single_item_link);
+        phoneButton = (FloatingActionButton) v.findViewById(R.id.phone);
         itemDescriptionView = (TextView) v.findViewById(R.id.single_item_description);
         progressBar = (ProgressBar) v.findViewById(R.id.singleItemProgressBar);
         addItemFab = (FloatingActionButton) v.findViewById(R.id.addItemFab);
@@ -191,15 +182,13 @@ public class SingleItemActivity extends Fragment {
             ExecutorService executor = Executors.newCachedThreadPool();
             executor.submit(() -> {
                 try {
-                    JSONArray jsonArray = new JSONArray(res);
-                    JSONObject jsonObject = jsonArray.getJSONObject(0);
-                    itemName = jsonObject.getString("ITEM_NAME");
-                    restaurantAddress = jsonObject.getString("ADDRESS");
-                    restaurantName = jsonObject.getString("COMPANY_NAME");
-                    restPhone = jsonObject.getString("TEL");
-                    restUrl = jsonObject.getString("URL");
-                    itemDescription = jsonObject.getString("DESCRIPTION");
-                    itemImage = jsonObject.getString("IMAGE_URL");
+                    JSONObject jsonObject = new JSONObject(res);
+                    itemName = jsonObject.getString("item_name");
+                    restaurantAddress = jsonObject.getString("address");
+                    restaurantName = jsonObject.getString("vendor_name");
+                    restPhone = jsonObject.getString("telephone");
+                    itemDescription = jsonObject.getString("item_description");
+                    itemImage = jsonObject.getString("primary_image");
                     runOnUiThread(() -> {
                         updateView();
                     });
@@ -218,6 +207,11 @@ public class SingleItemActivity extends Fragment {
         new LoadImages(itemImageView).execute(itemImage);
         restaurantNameView.setText(restaurantName);
         itemDescriptionView.setText(itemDescription);
+
+        if(restPhone.isEmpty()){
+            phoneButton.setVisibility(GONE);
+        }
+
         progressBar.setProgress(0);
         progressBar.setVisibility(View.INVISIBLE);
     }

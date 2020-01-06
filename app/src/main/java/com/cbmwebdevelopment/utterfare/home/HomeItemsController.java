@@ -44,8 +44,6 @@ public class HomeItemsController extends AsyncTask<String, String, String> {
             data += "&" + URLEncoder.encode("distance", "UTF-8") + "=" + URLEncoder.encode(distance, "UTF-8");
             data += "&" + URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode(action, "UTF-8");
 
-            Log.i(this.getClass().getName(), data);
-
             // Establish the connection
             URL url = new URL(link);
             URLConnection conn = url.openConnection();
@@ -84,8 +82,6 @@ public class HomeItemsController extends AsyncTask<String, String, String> {
 
     @Override
     protected void onPostExecute(String result){
-        Log.i(TAG, result);
         homeActivity.showHomeItems(result, this.action);
-        Log.i(TAG, "Send the items");
     }
 }
