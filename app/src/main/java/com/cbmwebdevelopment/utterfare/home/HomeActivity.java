@@ -1,7 +1,6 @@
 package com.cbmwebdevelopment.utterfare.home;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +21,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import cbmwebdevelopment.utterfare.R;
 
@@ -45,27 +48,30 @@ public class HomeActivity extends Fragment {
     private ProgressBar homeProgressBar;
     private LinearLayout homeContentLayout;
     private ViewGroup container;
-    private String lat, lng;
+    private String lat, lng, fullAddress;
     private HomeItemsController topItemsController, localItemsController, personalizedItemsController;
-    AsyncTask<String, String, String> topItemsTask, localItemsTask, personalizedItemsTask;
 
 
     @Override
-    public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstance){
+    public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstance) {
         super.onCreate(savedInstance);
 
         v = layoutInflater.inflate(R.layout.activity_home, container, false);
 
         this.lat = MainActivity.lat;
         this.lng = MainActivity.lng;
+        this.fullAddress = !MainActivity.fullAddress.isEmpty() ? MainActivity.fullAddress : "6 Kent Ct., Hilton Head Island SC, 29926";
+
 
         topItemsController = new HomeItemsController(this);
-        localItemsController = new HomeItemsController(this);
-        personalizedItemsController = new HomeItemsController(this);
+        topItemsController.execute(fullAddress, "25", "get_top_items");
 
-        topItemsTask = topItemsController.execute("", "10", "get_top_items");
-        localItemsTask = localItemsController.execute("320 Burlington Ave, Gibsonville, NC 27249", "25", "get_local_items");
-        personalizedItemsTask = personalizedItemsController.execute("320 Burlington Ave, Gibsonville, NC 27249", "25", "get_recommendations");
+        localItemsController = new HomeItemsController(this);
+        localItemsController.execute(fullAddress, "25", "get_local_items");
+
+        personalizedItemsController = new HomeItemsController(this);
+        personalizedItemsController.execute(fullAddress, "25", "get_local_items");
+
 
         return v;
     }
@@ -78,7 +84,7 @@ public class HomeActivity extends Fragment {
         localPicksRV = (RecyclerView) v.findViewById(R.id.local_picks_rv);
         personalizedPicksRV = (RecyclerView) v.findViewById(R.id.personalized_picks_rv);
 
-        homeContentLayout = (LinearLayout)v.findViewById(R.id.home_content_layout);
+        homeContentLayout = (LinearLayout) v.findViewById(R.id.home_content_layout);
         homeProgressBar = (ProgressBar) v.findViewById(R.id.home_progress_bar);
 
 
@@ -106,17 +112,17 @@ public class HomeActivity extends Fragment {
 
     }
 
-    public void showHomeItems(String data, String section){
+    public void showHomeItems(String data, String section) {
 
         try {
 
             JSONArray jsonArray = new JSONArray(data);
-            for(int i = 0; i < jsonArray.length(); i++){
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
                 String itemId = jsonObj.getString("item_id");
                 String itemName = jsonObj.getString("item_name");
                 String itemImage = jsonObj.getString("primary_image");
-                switch(section){
+                switch (section) {
                     case "get_top_items":
                         topPicksList.add(new HomeItems(itemId, itemName, itemImage));
                         break;
@@ -126,10 +132,11 @@ public class HomeActivity extends Fragment {
                     case "get_recommendations":
                         personalizedPicksList.add(new HomeItems(itemId, itemName, itemImage));
                         break;
-                    default:break;
+                    default:
+                        break;
                 }
             }
-            switch(section){
+            switch (section) {
                 case "get_top_items":
                     topItemsAdapter.notifyDataSetChanged();
                     break;
@@ -141,9 +148,10 @@ public class HomeActivity extends Fragment {
                     homeProgressBar.setVisibility(GONE);
                     homeContentLayout.setVisibility(VISIBLE);
                     break;
-                default:break;
+                default:
+                    break;
             }
-        }catch(JSONException ex){
+        } catch (JSONException ex) {
             Log.e(TAG, "JSON Exception");
             Log.e(this.getClass().getName(), "JSON Exception" + ex.getMessage());
             Log.e(TAG, "Result");

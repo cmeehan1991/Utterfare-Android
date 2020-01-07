@@ -82,6 +82,6 @@ public class HomeItemsController extends AsyncTask<String, String, String> {
 
     @Override
     protected void onPostExecute(String result){
-        homeActivity.showHomeItems(result, this.action);
+        //homeActivity.showHomeItems(result, this.action);
     }
 }

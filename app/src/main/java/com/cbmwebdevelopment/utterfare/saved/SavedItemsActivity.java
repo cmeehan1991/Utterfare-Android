@@ -166,8 +166,6 @@ public class SavedItemsActivity extends Fragment {
         try {
             return signIn.get();
         } catch (ExecutionException | InterruptedException ex) {
-            Log.e(TAG, "Sign In Exception");
-            Log.e(TAG, ex.getMessage());
             return false;
         }
 

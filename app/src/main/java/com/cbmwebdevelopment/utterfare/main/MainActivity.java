@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,6 +23,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import cbmwebdevelopment.utterfare.R;
 
 
@@ -30,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public static final String UF_SHARED_PREFERENCES = "UF_SHARED_PREFERENCES";
     public SharedPreferences sharedPreferences;
     protected LocationManager locationManager;
-    public static String lat, lng;
+    public static String lat, lng, fullAddress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         });
 
     }
-    private void initViews(String lat, String lng){
+    private void initViews(String lat, String lng, String fullAddress){
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment pager = new ViewPagerActivity();
@@ -65,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         FragmentTransaction ft = fragmentManager.beginTransaction();
 
         ft.add(R.id.switch_fragment, pager, "Pager");
+
+
         ft.commit();
 
     }
@@ -90,9 +98,20 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         this.lat = String.valueOf(location.getLatitude());
         this.lng = String.valueOf(location.getLongitude());
 
+        Geocoder mGeocoder = new Geocoder(this, Locale.ENGLISH);
+        try {
+            List<Address> addresses = mGeocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            if (addresses.size() > 0) {
+                this.fullAddress = addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea() + " " + addresses.get(0).getPostalCode();
+            }
+        } catch (IOException ex) {
+            Log.e(TAG, "Error getting address");
+        }
+
         locationManager.removeUpdates(this);
-        initViews(this.lat, this.lng);
+        initViews(this.lat, this.lng, this.fullAddress);
     }
+
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
