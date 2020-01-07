@@ -3,7 +3,6 @@ package com.cbmwebdevelopment.utterfare.saved;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,11 +33,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
 
 import cbmwebdevelopment.utterfare.R;
 
@@ -114,12 +111,12 @@ public class SavedItemsActivity extends Fragment {
             signInButton.setOnClickListener((listener) -> {
                 signInProgressBar.setVisibility(VISIBLE);
                 boolean signedIn = false;
-                if(!usernameInput.getText().toString().isEmpty() && !passwordInput.getText().toString().isEmpty()){
-                   signedIn = signUserIn(usernameInput.getText().toString(), passwordInput.getText().toString());
-                   sharedPreferences.edit().putBoolean("LOGGED_IN", signedIn).commit();
+                if (!usernameInput.getText().toString().isEmpty() && !passwordInput.getText().toString().isEmpty()) {
+                    signedIn = signUserIn(usernameInput.getText().toString(), passwordInput.getText().toString());
+                    sharedPreferences.edit().putBoolean("LOGGED_IN", signedIn).commit();
                 }
 
-                if(signedIn){
+                if (signedIn) {
 
                     signInDialog.cancel();
                 }
@@ -156,7 +153,7 @@ public class SavedItemsActivity extends Fragment {
 
             boolean success = false;
 
-            if(jsonObj.getString("response").equals("SUCCESS")){
+            if (jsonObj.getString("response").equals("SUCCESS")) {
                 success = true;
                 sharedPreferences.edit().putString("USER_ID", jsonObj.getString("user_id")).commit();
             }
@@ -253,24 +250,34 @@ public class SavedItemsActivity extends Fragment {
     private void showItems(JSONArray jsonArrResponse) {
 
         ExecutorService executor = Executors.newCachedThreadPool();
+
         executor.submit(() -> {
+
             for (int i = 0; i < jsonArrResponse.length(); i++) {
-                SavedItems items = new SavedItems();
+
+                SavedItems items;
+
                 try {
+
                     JSONObject jsonObject = jsonArrResponse.getJSONObject(i);
-                    items.setItemId(jsonObject.getString("ITEM_ID"));
-                    items.setItemName(jsonObject.getString("ITEM_NAME"));
-                    items.setDataTable(jsonObject.getString("ITEM_DATA_TABLE"));
-                    items.setItemImage(jsonObject.getString("ITEM_IMAGE_URL"));
-                    items.setItemName(jsonObject.getString("ITEM_NAME"));
+
+                    items = new SavedItems(jsonObject.getString("item_id"), jsonObject.getString("vendor_name"), jsonObject.getString("primary_image"), jsonObject.getString("item_name"), jsonObject.getString("item_short_description"));
+
+                    itemsList.add(items);
+
                 } catch (JSONException ex) {
+
                     Log.e(TAG, "JSON Exception: " + ex.getMessage());
+
                 }
-                itemsList.add(items);
             }
+
             adapter.notifyDataSetChanged();
+
             progressBar.setVisibility(View.INVISIBLE);
+
             progressBar.setProgress(0);
+
             executor.shutdown();
         });
     }

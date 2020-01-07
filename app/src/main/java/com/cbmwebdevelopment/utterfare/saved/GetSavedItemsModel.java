@@ -26,8 +26,9 @@ public class GetSavedItemsModel extends AsyncTask<String, Void, String> implemen
     protected String doInBackground(String... args) {
         String userId = args[0];
         String results = null;
+        String userItemsUrl = "https://www.utterfare.com/includes/php/UsersItems.php";
         try{
-            URL url = new URL(USER_ITEMS_URL);
+            URL url = new URL(userItemsUrl);
             URLConnection conn = url.openConnection();
             conn.setDoOutput(true);
 

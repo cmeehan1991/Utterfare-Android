@@ -42,8 +42,11 @@ public class SavedItemsAdapter extends RecyclerView.Adapter<SavedItemsAdapter.Vi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.saved_items_list_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(v);
+
         return viewHolder;
     }
 
@@ -55,7 +58,6 @@ public class SavedItemsAdapter extends RecyclerView.Adapter<SavedItemsAdapter.Vi
         holder.itemView.setOnClickListener((listener)->{
             Bundle bundle = new Bundle();
             bundle.putString("itemId", savedItems.getItemId());
-            bundle.putString("dataTable", savedItems.getDataTable());
 
             goToSingleItemView(bundle);
 
@@ -64,13 +66,14 @@ public class SavedItemsAdapter extends RecyclerView.Adapter<SavedItemsAdapter.Vi
         holder.savedItemName.setText(savedItems.getItemName());
         new LoadImages((ImageView) holder.itemView.findViewById(R.id.saved_item_image)).execute(savedItems.getItemImage());
         holder.itemRestaurantName.setText(savedItems.getCompanyName());
+        holder.itemDescription.setText(savedItems.getItemShortDescription());
     }
 
     private void goToSingleItemView(Bundle bundle){
         SingleItemActivity singleItemActivity = new SingleItemActivity();
 
         singleItemActivity.setArguments(bundle);
-        Log.i(TAG, bundle.toString());
+
         FragmentActivity activity = (FragmentActivity) context;
 
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
@@ -78,8 +81,8 @@ public class SavedItemsAdapter extends RecyclerView.Adapter<SavedItemsAdapter.Vi
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 
-        fragmentTransaction.replace(android.R.id.tabcontent, singleItemActivity);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.switch_fragment, singleItemActivity);
+        fragmentTransaction.addToBackStack("Saved Items");
         fragmentTransaction.commit();
     }
     @Override
@@ -96,6 +99,7 @@ public class SavedItemsAdapter extends RecyclerView.Adapter<SavedItemsAdapter.Vi
             savedItemName = (TextView) itemView.findViewById(R.id.saved_item_name);
             itemImage = (ImageView) itemView.findViewById(R.id.saved_item_image);
             itemRestaurantName = (TextView) itemView.findViewById(R.id.saved_item_restaurant_name);
+            itemDescription = (TextView) itemView.findViewById((R.id.saved_item_short_description));
         }
     }
 }

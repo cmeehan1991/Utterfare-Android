@@ -7,7 +7,15 @@ package com.cbmwebdevelopment.utterfare.saved;
  */
 
 public class SavedItems {
-    private String itemId, dataTable, companyName, companyId, itemImage, itemName;
+    private String itemId, companyName, itemImage, itemName, itemShortDescription;
+
+    public SavedItems(String itemId, String companyName, String itemImage, String itemName, String itemShortDescription){
+        this.itemId = itemId;
+        this.companyName = companyName;
+        this.itemImage = itemImage;
+        this.itemName = itemName;
+        this.itemShortDescription = itemShortDescription;
+    }
 
     public String getItemId() {
         return itemId;
@@ -16,29 +24,12 @@ public class SavedItems {
     public void setItemId(String val) {
         this.itemId = val;
     }
-
-    public String getDataTable() {
-        return dataTable;
-    }
-
-    public void setDataTable(String val) {
-        this.dataTable = val;
-    }
-
     public String getCompanyName(){
         return companyName;
     }
 
     public String setCompanyName(String val){
         return this.companyName = val;
-    }
-
-    public String getCompanyId(){
-        return companyId;
-    }
-
-    public void setCompanyId(String val){
-        this.companyId = val;
     }
 
     public String getItemImage() {
@@ -56,4 +47,8 @@ public class SavedItems {
     public void setItemName(String val) {
         this.itemName = val;
     }
+
+    public String getItemShortDescription(){ return itemShortDescription;}
+
+    public void setItemShortDescription(String val){ this.itemShortDescription = val;}
 }
