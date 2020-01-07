@@ -137,7 +137,7 @@ public class UserLoginActivity extends Fragment {
         String password = passwordEditText.getText().toString();
 
         if(!username.isEmpty() && !password.isEmpty()){
-            SignInModel signInModel = new SignInModel(this);
+            SignInModel signInModel = new SignInModel();
             signInModel.execute(username, password);
             try {
                 String results = signInModel.get();

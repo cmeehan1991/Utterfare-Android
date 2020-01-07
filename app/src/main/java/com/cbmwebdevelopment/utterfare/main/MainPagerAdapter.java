@@ -41,6 +41,9 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 SearchActivity tab2 = new SearchActivity();
                 return tab2;
+            case 2:
+                SavedItemsActivity tab3 = new SavedItemsActivity();
+                return tab3;
             default: return null;
         }
 
@@ -57,6 +60,9 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 title = "Search";
                 break;
+            case 2:
+                title = "Saved Items";
+                break;
             default: break;
         }
         return title;
@@ -64,7 +70,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     public static class ArrayListFragment extends Fragment {

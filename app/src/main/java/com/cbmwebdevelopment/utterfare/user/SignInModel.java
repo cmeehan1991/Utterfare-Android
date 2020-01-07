@@ -21,16 +21,12 @@ public class SignInModel extends AsyncTask<String, Void, String> {
     private final String TAG  = this.getClass().getName();
     private UserLoginActivity userLoginActivity;
 
-    public SignInModel(UserLoginActivity userLoginActivity){
-        this.userLoginActivity = userLoginActivity;
-    }
-
     @Override
     protected String doInBackground(String... args) {
         String username = args[0];
         String password = args[1];
 
-        String link = "https://www.utterfare.com/includes/mobile/users/Users.php";
+        String link = "https://www.utterfare.com/includes/php/Users.php";
         String results = null;
 
         try{
