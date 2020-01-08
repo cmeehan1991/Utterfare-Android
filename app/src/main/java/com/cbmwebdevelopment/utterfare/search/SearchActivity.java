@@ -32,6 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.cbmwebdevelopment.utterfare.main.MainActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -47,8 +48,8 @@ import java.util.Locale;
 
 import cbmwebdevelopment.utterfare.R;
 
-public class SearchActivity extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    private static final int ACCESS_LOCATION_PERMISSION = 1;
+public class SearchActivity extends Fragment {
+        private static final int ACCESS_LOCATION_PERMISSION = 1;
     private Spinner distanceSpinner;
     private InputMethodManager imm;
     private Button locationButton;
@@ -74,7 +75,6 @@ public class SearchActivity extends Fragment implements GoogleApiClient.Connecti
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = getContext();
-        getLocation();
     }
 
     /**
@@ -92,6 +92,16 @@ public class SearchActivity extends Fragment implements GoogleApiClient.Connecti
         return v;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if(isVisibleToUser){
+            locationButton.setText(MainActivity.fullAddress);
+        }
+
+    }
+
 
     @Override
     public void onActivityCreated(Bundle savedBundleInstance) {
@@ -100,17 +110,12 @@ public class SearchActivity extends Fragment implements GoogleApiClient.Connecti
         // Get instance of activity
         mActivity = getActivity();
 
-        // Disable home up on the action bar
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
-        // Initialize the location client
-        initializeLocationClient();
-
         // Initialize the inputs
         initializeInputs();
 
         // Create the input listeners
         createInputListeners();
+
 
     }
 
@@ -131,48 +136,6 @@ public class SearchActivity extends Fragment implements GoogleApiClient.Connecti
     }
 
     /**
-     * Initialize the location client and get the user's location
-     */
-    private void initializeLocationClient(){
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
-    }
-
-    /**
-     * Set the callback fore the location client
-     */
-    private void setLocationCallback() {
-        mLocationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
-                }
-                for (Location location : locationResult.getLocations()) {
-                    latitude = String.valueOf(location.getLatitude());
-                    longitude = String.valueOf(location.getLongitude());
-                    setAddress(location.getLatitude(), location.getLongitude());
-                }
-            }
-        };
-    }
-
-    /**
-     * This is setting up the Google API Client
-     * Once the client is set up we are then going to connect
-     */
-    private void getLocation() {
-        createLocationRequest();
-        mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
-        }
-    }
-
-    /**
      * Creating a location request with an interval of 5 seconds.
      */
     private void createLocationRequest() {
@@ -182,33 +145,6 @@ public class SearchActivity extends Fragment implements GoogleApiClient.Connecti
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    /**
-     * Stop the location updates if the user opts to enter a manual location.
-     */
-    private void stopLocationUpdates() {
-        mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-        latitude = null;
-        longitude = null;
-
-    }
-
-
-    private void startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-            if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.ACCESS_FINE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-
-            } else {
-                ActivityCompat.requestPermissions(mActivity, permissions, ACCESS_LOCATION_PERMISSION);
-            }
-
-        } else {
-            hasPermission = true;
-        }
-        if (hasPermission) {
-            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
-        }
-    }
 
     /**
      * Initiaize the views
@@ -232,13 +168,6 @@ public class SearchActivity extends Fragment implements GoogleApiClient.Connecti
      * @param view
      */
     public void submitSearch(View view) {
-        /*
-        if (latitude == null || longitude == null) {
-            location = parseLocation(locationButton.getText().toString());
-        } else {
-            location = String.valueOf(latitude) + ":" + String.valueOf(longitude);
-        }
-        */
         location = locationButton.getText().toString();
         // Hide the keyboard
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -275,20 +204,9 @@ public class SearchActivity extends Fragment implements GoogleApiClient.Connecti
         return parseDistance;
     }
 
-    private String parseLocation(String location) {
-        String parseLocation = null;
-        if (location.matches("\\d+")) {
-            parseLocation = location;
-        } else if (location.matches("[a-zA-Z ,.-_]+")) {
-            parseLocation = location;
-        } else {
-            parseLocation = "BAD LOCATION";
-        }
-        return parseLocation;
-    }
+
 
     public void manualLocationInput(View view) {
-        stopLocationUpdates();
         AlertDialog.Builder locationDialog = new AlertDialog.Builder(mContext);
         locationDialog.setTitle("Set Location");
         locationDialog.setMessage("Set your location");
@@ -314,92 +232,6 @@ public class SearchActivity extends Fragment implements GoogleApiClient.Connecti
         });
         locationDialog.show();
 
-
     }
-
-
-    /**
-     * Sets the address on the front end to the city, state, and zip code
-     *
-     * @param lat
-     * @param lng
-     */
-    private void setAddress(double lat, double lng) {
-        Geocoder mGeocoder = new Geocoder(mContext, Locale.ENGLISH);
-        try {
-            List<Address> addresses = mGeocoder.getFromLocation(lat, lng, 1);
-            if (addresses.size() > 0) {
-                locationButton.setText(addresses.get(0).getLocality() + ", " + addresses.get(0).getAdminArea() + " " + addresses.get(0).getPostalCode());
-            }
-        } catch (IOException ex) {
-            Log.e(TAG, "Error getting address");
-            locationButton.setText("Set your location");
-        }
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        setLocationCallback();
-
-        // Check permissions
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-
-            } else {
-                ActivityCompat.requestPermissions(mActivity, permissions, ACCESS_LOCATION_PERMISSION);
-            }
-            return;
-        }
-
-        mFusedLocationClient.getLastLocation().addOnSuccessListener(mActivity, (OnSuccessListener<Location>) location -> {
-            // Get the last known location.
-            if(location != null){
-                mRequestingLocationUpdates = true;
-                latitude = String.valueOf(location.getLatitude());
-                longitude = String.valueOf(location.getLongitude());
-                setAddress(location.getLatitude(), location.getLongitude());
-            }else{
-                mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-                Log.i(TAG, "LOCATION IS NULL");
-            }
-        });
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-    @Override
-    public void onStop(){
-        super.onStop();
-        if(mGoogleApiClient.isConnected()){
-            mGoogleApiClient.disconnect();
-        }
-    }
-    @Override
-    public void onStart(){
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
-
-    /**
-     * Resume location updates.
-     * Making this public because it clashes with the fragment onResume()
-     */
-    @Override
-    public void onResume(){
-        super.onResume();
-        if(mRequestingLocationUpdates){
-            startLocationUpdates();
-        }
-    }
-
-
 
 }

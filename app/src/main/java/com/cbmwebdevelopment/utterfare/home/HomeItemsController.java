@@ -32,6 +32,7 @@ public class HomeItemsController extends AsyncTask<String, String, String> {
      */
     @Override
     protected String doInBackground(String... args) {
+
         String location = args[0];
         String distance = args[1];
         this.action = args[2];
@@ -82,6 +83,6 @@ public class HomeItemsController extends AsyncTask<String, String, String> {
 
     @Override
     protected void onPostExecute(String result){
-        //homeActivity.showHomeItems(result, this.action);
+        homeActivity.showHomeItems(result, this.action);
     }
 }

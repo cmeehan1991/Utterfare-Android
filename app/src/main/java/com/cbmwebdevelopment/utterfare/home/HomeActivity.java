@@ -21,10 +21,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import cbmwebdevelopment.utterfare.R;
 
@@ -45,7 +43,7 @@ public class HomeActivity extends Fragment {
     public List<HomeItems> topPicksList, localPicksList, personalizedPicksList;
     private RecyclerView.Adapter topItemsAdapter, localItemsAdapter, personalizedItemsAdapter;
     private RecyclerView.LayoutManager topPicksLayoutManager, localPicksLayoutManager, personalizedPicksLayoutManager;
-    private ProgressBar homeProgressBar;
+    private ProgressBar topItemsProgressBar, localItemsProgressBar, personalizedItemsProgressBar;
     private LinearLayout homeContentLayout;
     private ViewGroup container;
     private String lat, lng, fullAddress;
@@ -53,25 +51,54 @@ public class HomeActivity extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstance) {
-        super.onCreate(savedInstance);
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
 
-        v = layoutInflater.inflate(R.layout.activity_home, container, false);
 
         this.lat = MainActivity.lat;
         this.lng = MainActivity.lng;
         this.fullAddress = !MainActivity.fullAddress.isEmpty() ? MainActivity.fullAddress : "6 Kent Ct., Hilton Head Island SC, 29926";
 
+        if(isVisibleToUser) {
+            ExecutorService executor = Executors.newCachedThreadPool();
+            executor.submit(()->{
+                topItemsController = new HomeItemsController(this);
+                topItemsController.execute(this.fullAddress, "25", "get_top_items");
 
-        topItemsController = new HomeItemsController(this);
-        topItemsController.execute(fullAddress, "25", "get_top_items");
+            });
 
-        localItemsController = new HomeItemsController(this);
-        localItemsController.execute(fullAddress, "25", "get_local_items");
+            executor.submit(()->{
+                localItemsController = new HomeItemsController(this);
+                localItemsController.execute(fullAddress, "25", "get_local_items");
 
-        personalizedItemsController = new HomeItemsController(this);
-        personalizedItemsController.execute(fullAddress, "25", "get_local_items");
+            });
 
+            executor.submit(()->{
+                personalizedItemsController = new HomeItemsController(this);
+                personalizedItemsController.execute(fullAddress, "25", "get_recommendations");
+            });
+
+        }
+    }
+
+    private void initFeeds(){
+
+        topItemsAdapter = new HomeItemsAdapter(topPicksList, context);
+        localItemsAdapter = new HomeItemsAdapter(localPicksList, context);
+        personalizedItemsAdapter = new HomeItemsAdapter(personalizedPicksList, context);
+
+        topPicksRV.setAdapter(topItemsAdapter);
+        localPicksRV.setAdapter(localItemsAdapter);
+        personalizedPicksRV.setAdapter(personalizedItemsAdapter);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstance) {
+        super.onCreate(savedInstance);
+
+        v = layoutInflater.inflate(R.layout.activity_home, container, false);
+
+        this.context = v.getContext();
 
         return v;
     }
@@ -85,8 +112,10 @@ public class HomeActivity extends Fragment {
         personalizedPicksRV = (RecyclerView) v.findViewById(R.id.personalized_picks_rv);
 
         homeContentLayout = (LinearLayout) v.findViewById(R.id.home_content_layout);
-        homeProgressBar = (ProgressBar) v.findViewById(R.id.home_progress_bar);
 
+        topItemsProgressBar = (ProgressBar) v.findViewById(R.id.top_items_progress_bar);
+        localItemsProgressBar = (ProgressBar) v.findViewById(R.id.local_picks_progress_bar);
+        personalizedItemsProgressBar = (ProgressBar) v.findViewById(R.id.personalized_picks_progress_bar);
 
         topPicksLayoutManager = new LinearLayoutManager(v.getContext(), RecyclerView.HORIZONTAL, false);
         localPicksLayoutManager = new LinearLayoutManager(v.getContext(), RecyclerView.HORIZONTAL, false);
@@ -96,20 +125,12 @@ public class HomeActivity extends Fragment {
         localPicksRV.setLayoutManager(localPicksLayoutManager);
         personalizedPicksRV.setLayoutManager(personalizedPicksLayoutManager);
 
-        context = v.getContext();
-
         topPicksList = new ArrayList<>();
         localPicksList = new ArrayList<>();
         personalizedPicksList = new ArrayList<>();
 
-        topItemsAdapter = new HomeItemsAdapter(topPicksList, context);
-        localItemsAdapter = new HomeItemsAdapter(localPicksList, context);
-        personalizedItemsAdapter = new HomeItemsAdapter(personalizedPicksList, context);
 
-        topPicksRV.setAdapter(topItemsAdapter);
-        localPicksRV.setAdapter(localItemsAdapter);
-        personalizedPicksRV.setAdapter(personalizedItemsAdapter);
-
+        initFeeds();
     }
 
     public void showHomeItems(String data, String section) {
@@ -139,18 +160,23 @@ public class HomeActivity extends Fragment {
             switch (section) {
                 case "get_top_items":
                     topItemsAdapter.notifyDataSetChanged();
+                    topItemsProgressBar.setVisibility(GONE);
+                    topPicksRV.setVisibility(VISIBLE);
                     break;
                 case "get_local_items":
                     localItemsAdapter.notifyDataSetChanged();
+                    localItemsProgressBar.setVisibility(GONE);
+                    localPicksRV.setVisibility(VISIBLE);
                     break;
                 case "get_recommendations":
                     personalizedItemsAdapter.notifyDataSetChanged();
-                    homeProgressBar.setVisibility(GONE);
-                    homeContentLayout.setVisibility(VISIBLE);
+                    personalizedItemsProgressBar.setVisibility(GONE);
+                    personalizedPicksRV.setVisibility(VISIBLE);
                     break;
                 default:
                     break;
             }
+
         } catch (JSONException ex) {
             Log.e(TAG, "JSON Exception");
             Log.e(this.getClass().getName(), "JSON Exception" + ex.getMessage());

@@ -10,12 +10,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -29,11 +26,14 @@ import java.util.Locale;
 
 import cbmwebdevelopment.utterfare.R;
 
+import static android.view.View.GONE;
+
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
     private final String TAG = this.getClass().getName();
     public static final String UF_SHARED_PREFERENCES = "UF_SHARED_PREFERENCES";
+    public ProgressBar mainLoadingIndicator;
     public SharedPreferences sharedPreferences;
     protected LocationManager locationManager;
     public static String lat, lng, fullAddress;
@@ -43,15 +43,24 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mainLoadingIndicator = (ProgressBar) findViewById(R.id.main_progress_indicator);
         sharedPreferences = getSharedPreferences(UF_SHARED_PREFERENCES, MODE_PRIVATE);
 
+
+        initViews();
+
+        // Instantiate the location manager
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        // Check for location permissions
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PackageManager.PERMISSION_GRANTED);
 
             return;
         }
+
+        // Reqeust the location updates
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
 
@@ -63,7 +72,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         });
 
     }
-    private void initViews(String lat, String lng, String fullAddress){
+
+
+    private void initViews(){
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment pager = new ViewPagerActivity();
@@ -74,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 
         ft.commit();
+
+        mainLoadingIndicator.setVisibility(GONE);
 
     }
 
@@ -109,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
 
         locationManager.removeUpdates(this);
-        initViews(this.lat, this.lng, this.fullAddress);
     }
 
 
