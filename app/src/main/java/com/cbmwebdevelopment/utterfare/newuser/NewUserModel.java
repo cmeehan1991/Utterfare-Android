@@ -31,10 +31,14 @@ public class NewUserModel extends AsyncTask<String, Void, String> implements Glo
         String state = args[5];
         String email = args[6];
         String phone = args[7];
+        String postalCode = args[8];
+        String gender = args[9];
+        String birthday = args[10];
 
         String results = null;
         try{
-            URL url = new URL(USER_LINK);
+            String link = "https://www.utterfare.com/includes/php/Users.php";
+            URL url = new URL(link);
             URLConnection conn = url.openConnection();
             conn.setDoOutput(true);
 
@@ -48,7 +52,9 @@ public class NewUserModel extends AsyncTask<String, Void, String> implements Glo
             data += "&" + URLEncoder.encode("state", ENCODING) + "=" + URLEncoder.encode(state, ENCODING);
             data += "&" + URLEncoder.encode("email", ENCODING) + "=" + URLEncoder.encode(email, ENCODING);
             data += "&" + URLEncoder.encode("phone", ENCODING) + "=" + URLEncoder.encode(phone, ENCODING);
-
+            data += "&" + URLEncoder.encode("postal_code", ENCODING) + "=" + URLEncoder.encode(postalCode, ENCODING);
+            data += "&" + URLEncoder.encode("gender", ENCODING) + "=" + URLEncoder.encode(gender, ENCODING);
+            data += "&" + URLEncoder.encode("birthday", ENCODING) + "=" + URLEncoder.encode(birthday, ENCODING);
             // Set the output stream
             OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
             writer.write(data);

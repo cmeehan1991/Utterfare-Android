@@ -69,7 +69,7 @@ public class GridViewActivity extends AppCompatActivity implements RecyclerView.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feed);
+        setContentView(R.layout.fragment_feed);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.gridRecyclerView);
         mRecyclerView.setHasFixedSize(true);

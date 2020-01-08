@@ -26,9 +26,6 @@ public class SaveItemModel extends AsyncTask<String, Void, String> {
         // The arguements passed by the activity
         String userId = args[0];
         String itemId = args[1];
-        String itemName = args[2];
-        String dataTable = args[3];
-        String itemImageUrl = args[4];
 
         // The results returned by the request.
         String results = null;
@@ -38,12 +35,10 @@ public class SaveItemModel extends AsyncTask<String, Void, String> {
             String data = URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode("add_item", "UTF-8");
             data += "&" + URLEncoder.encode("user_id", "UTF-8") + "=" + URLEncoder.encode(userId, "UTF-8");
             data += "&" + URLEncoder.encode("item_id", "UTF-8") + "=" + URLEncoder.encode(itemId, "UTF-8");
-            data += "&" + URLEncoder.encode("item_name", "UTF-8") + "=" + URLEncoder.encode(itemName, "UTF-8");
-            data += "&" + URLEncoder.encode("data_table", "UTF-8") + "=" + URLEncoder.encode(dataTable, "UTF-8");
-            data += "&" + URLEncoder.encode("item_image_url", "UTF-8") + "=" + URLEncoder.encode(itemImageUrl, "UTF-8");
 
             // Establish connection with server
-            URL url = new URL(USER_ITEMS_URL);
+            String link = "https://www.utterfare.com/includes/php/UsersItems.php";
+            URL url = new URL(link);
             URLConnection conn = url.openConnection();
             conn.setDoOutput(true);
 

@@ -64,7 +64,7 @@ public class SingleItemActivity extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.single_item, container, false);
+        v = inflater.inflate(R.layout.fragment_single_item, container, false);
         return v;
     }
 
@@ -93,7 +93,7 @@ public class SingleItemActivity extends Fragment {
             openMap(v);
         });
 
-        /*
+
         addItemFab.setOnClickListener((l) -> {
             boolean isLoggedIn = sharedPreferences.getBoolean("LOGGED_IN", false);
             if (isLoggedIn) {
@@ -102,7 +102,7 @@ public class SingleItemActivity extends Fragment {
                 Toast.makeText(mContext, "You must be signed in to save items", Toast.LENGTH_LONG).show();
             }
         });
-        */
+
         phoneButton.setOnClickListener((l) -> {
             Intent intent = new Intent(Intent.ACTION_CALL);
             intent.setData(Uri.parse("tel:" + restPhone));
@@ -126,7 +126,7 @@ public class SingleItemActivity extends Fragment {
         try {
             SaveItemModel saveItemModel = new SaveItemModel();
             String userId = sharedPreferences.getString("USER_ID", null);
-            String results = saveItemModel.execute(userId, itemId, dataTable, itemName, itemImage).get();
+            String results = saveItemModel.execute(userId, itemId).get();
             JSONObject jsonObject = new JSONObject(results);
 
             boolean status = jsonObject.getBoolean("STATUS");
@@ -156,7 +156,7 @@ public class SingleItemActivity extends Fragment {
         phoneButton = (FloatingActionButton) v.findViewById(R.id.phone);
         itemDescriptionView = (TextView) v.findViewById(R.id.single_item_description);
         progressBar = (ProgressBar) v.findViewById(R.id.singleItemProgressBar);
-        //addItemFab = (FloatingActionButton) v.findViewById(R.id.addItemFab);
+        addItemFab = (FloatingActionButton) v.findViewById(R.id.addItemFab);
 
 
     }

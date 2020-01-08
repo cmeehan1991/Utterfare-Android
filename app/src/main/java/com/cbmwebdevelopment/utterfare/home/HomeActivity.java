@@ -57,7 +57,7 @@ public class HomeActivity extends Fragment {
 
         this.lat = MainActivity.lat;
         this.lng = MainActivity.lng;
-        this.fullAddress = !MainActivity.fullAddress.isEmpty() ? MainActivity.fullAddress : "6 Kent Ct., Hilton Head Island SC, 29926";
+        this.fullAddress = MainActivity.fullAddress != null  ? MainActivity.fullAddress : "6 Kent Ct., Hilton Head Island SC, 29926";
 
         if(isVisibleToUser) {
             ExecutorService executor = Executors.newCachedThreadPool();
@@ -96,7 +96,7 @@ public class HomeActivity extends Fragment {
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstance) {
         super.onCreate(savedInstance);
 
-        v = layoutInflater.inflate(R.layout.activity_home, container, false);
+        v = layoutInflater.inflate(R.layout.fragment_home, container, false);
 
         this.context = v.getContext();
 

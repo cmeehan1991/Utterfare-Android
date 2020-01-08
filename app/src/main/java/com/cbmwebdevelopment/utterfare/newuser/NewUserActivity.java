@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -43,8 +44,9 @@ public class NewUserActivity extends Fragment implements GlobalVariables {
     private View v;
     private Context mContext;
     private Activity mActivity;
-    private EditText firstNameEditText, lastNameEditText, cityEditText, phoneNumberEditText, emailEditText, passwordEditText, confirmPasswordEditText;
-    private Spinner stateSpinner;
+    private EditText firstNameEditText, lastNameEditText, cityEditText, postalCodeText, phoneNumberEditText, emailEditText, passwordEditText, confirmPasswordEditText;
+    private Spinner stateSpinner, genderSpinner;
+    private DatePicker birthdayDatePicker;
     private TextView confirmPasswordTextView, passwordMessageTextView, confirmPasswordMessageTextView;
     private Button signUpButton;
     private ArrayList<EditText>  missingItems;
@@ -76,6 +78,7 @@ public class NewUserActivity extends Fragment implements GlobalVariables {
         lastNameEditText = (EditText) v.findViewById(R.id.signup_last_name_edit_text);
         cityEditText = (EditText) v.findViewById(R.id.signup_city_edit_text);
         stateSpinner = (Spinner) v.findViewById(R.id.signup_state_spinner);
+        postalCodeText = (EditText) v.findViewById(R.id.postal_code_input);
         phoneNumberEditText = (EditText) v.findViewById(R.id.signup_phone_number_edittext);
         emailEditText = (EditText) v.findViewById(R.id.signup_email_edit_text);
         passwordEditText = (EditText) v.findViewById(R.id.signup_password_edit_text);
@@ -84,6 +87,8 @@ public class NewUserActivity extends Fragment implements GlobalVariables {
         confirmPasswordMessageTextView = (TextView) v.findViewById(R.id.confirm_password_message_text_view);
         confirmPasswordEditText = (EditText) v.findViewById(R.id.signup_confirm_password_edit_text);
         signUpButton = (Button) v.findViewById(R.id.sign_up_button);
+        genderSpinner = (Spinner) v.findViewById(R.id.gender_spinner);
+        birthdayDatePicker = (DatePicker) v.findViewById(R.id.birthday_date_picker);
 
         // Instantiate the input method manager (keyboard)
         imm = (InputMethodManager)mActivity.getSystemService(mContext.INPUT_METHOD_SERVICE);
@@ -172,14 +177,19 @@ public class NewUserActivity extends Fragment implements GlobalVariables {
             String state = stateSpinner.getSelectedItem().toString();
             String email = emailEditText.getText().toString();
             String phone = phoneNumberEditText.getText().toString();
+            String postalCode = postalCodeText.getText().toString();
+            String gender = genderSpinner.getSelectedItem().toString();
+            String birthday =String.valueOf(birthdayDatePicker.getYear()) + "-" + String.valueOf(birthdayDatePicker.getMonth()) + "-" + String.valueOf(birthdayDatePicker.getDayOfMonth());
+
+
 
             try {
-                String results = new NewUserModel().execute(username, password, firstName, lastName, city, state, email, phone).get();
-                Log.i(TAG, results);
+                String results = new NewUserModel().execute(username, password, firstName, lastName, city, state, email, phone, postalCode, gender, birthday).get();
+
                 JSONObject jsonObject = new JSONObject(results);
                 boolean success = jsonObject.getBoolean("SUCCESS");
                 if(success){
-                    String id = jsonObject.getString("ID");
+                    String id = jsonObject.getString("user_id");
                     goToSavedItems(id);
                 }else{
                     String response = jsonObject.getString("RESPONSE");
@@ -203,11 +213,7 @@ public class NewUserActivity extends Fragment implements GlobalVariables {
         mSharedPreferences.edit().putBoolean("LOGGED_IN", true).commit();
 
         SavedItemsActivity savedItemsActivity = new SavedItemsActivity();
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(android.R.id.tabcontent, savedItemsActivity)
-                .commit();
+        getFragmentManager().popBackStack();
     }
 
     private void notifyUser(String title, String message){

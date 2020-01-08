@@ -61,6 +61,39 @@
             android:entries="@array/states_array"/>
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Postal Code"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/postal_code_input"
+            android:inputType="textPostalAddress"/>
+
+        <TextView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gender"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/genders"
+            android:id="@+id/gender_spinner"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Birthday"/>
+
+        <DatePicker
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:calendarViewShown="false"
+            android:spinnersShown="true"
+            android:datePickerMode="spinner"
+            android:id="@+id/birthday_date_picker"/>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Phone Number" />
@@ -113,16 +146,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Confirm Password"
-            android:id="@+id/confirm_password_text_view"
-            android:visibility="invisible"/>
+            android:id="@+id/confirm_password_text_view"/>
 
         <EditText
             android:id="@+id/signup_confirm_password_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:imeOptions="actionGo"
-            android:visibility="invisible"/>
+            android:imeOptions="actionGo"/>
 
         <TextView
             android:layout_width="wrap_content"

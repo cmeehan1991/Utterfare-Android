@@ -1,11 +1,9 @@
-package com.cbmwebdevelopment.utterfare.profile;
+package com.cbmwebdevelopment.utterfare.user;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
@@ -17,27 +15,42 @@ import java.net.URLEncoder;
  * CBM Web Development
  * Connor.Meehan@cbmwebdevelopment.com
  */
-public class UpdateUserInformationModel extends AsyncTask<String, Void, String> {
+public class UpdateUserInformationModel {
     private final String TAG = getClass().getName();
-    @Override
-    protected String doInBackground(String... args) {
+
+    protected String updateUserInformation(String... args) {
         String results = null;
+
         String userId = args[0];
         String firstName = args[1];
         String lastName = args[2];
-        String city = args[3];
-        String state = args[4];
-        String email = args[5];
+        String email = args[3];
+        String telephone = args[4];
+        String primaryAddress = args[5];
+        String secondaryAddress = args[6];
+        String city = args[7];
+        String state = args[8];
+        String postalCode = args[9];
+        String gender = args[10];
+        String birthday = args[11];
+
+
         try{
-            String link = "https://www.utterfare.com/includes/mobile/users/Users.php";
+            String link = "https://www.utterfare.com/includes/php/Users.php";
 
             String data = URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode("set_user", "UTF-8");
             data += "&" + URLEncoder.encode("user_id", "UTF-8") + "=" + URLEncoder.encode(userId, "UTF-8");
             data += "&" + URLEncoder.encode("first_name", "UTF-8") + "=" + URLEncoder.encode(firstName, "UTF-8");
             data += "&" + URLEncoder.encode("last_name", "UTF-8") + "=" + URLEncoder.encode(lastName, "UTF-8");
+            data += "&" + URLEncoder.encode("primary_address", "UTF-8") + "=" + URLEncoder.encode(primaryAddress, "UTF-8");
+            data += "&" + URLEncoder.encode("secondary_address", "UTF-8") + "=" + URLEncoder.encode(secondaryAddress, "UTF-8");
             data += "&" + URLEncoder.encode("city", "UTF-8") + "=" + URLEncoder.encode(city, "UTF-8");
             data += "&" + URLEncoder.encode("state", "UTF-8") + "=" + URLEncoder.encode(state, "UTF-8");
-            data += "&" + URLEncoder.encode("email_address", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8");
+            data += "&" + URLEncoder.encode("postal_code", "UTF-8") + "=" + URLEncoder.encode(postalCode, "UTF-8");
+            data += "&" + URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(email, "UTF-8");
+            data += "&" + URLEncoder.encode("telephone_number", "UTF-8") + "=" + URLEncoder.encode(telephone, "UTF-8");
+            data += "&" + URLEncoder.encode("birthday", "UTF-8") + "=" + URLEncoder.encode(birthday, "UTF-8");
+            data += "&" + URLEncoder.encode("gender", "UTF-8") + "=" + URLEncoder.encode(gender, "UTF-8");
 
             // Establish a connection
             URL url = new URL(link);
@@ -65,6 +78,9 @@ public class UpdateUserInformationModel extends AsyncTask<String, Void, String> 
         }catch(IOException ex){
             Log.e(TAG, "Error: " + ex.getMessage());
         }
+
         return results;
     }
+
+
 }

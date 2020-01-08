@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.cbmwebdevelopment.utterfare.home.HomeActivity;
 import com.cbmwebdevelopment.utterfare.saved.SavedItemsActivity;
 import com.cbmwebdevelopment.utterfare.search.SearchActivity;
+import com.cbmwebdevelopment.utterfare.user.UserProfileActivity;
 
 import cbmwebdevelopment.utterfare.R;
 
@@ -44,6 +45,9 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
             case 2:
                 SavedItemsActivity tab3 = new SavedItemsActivity();
                 return tab3;
+            case 3:
+                UserProfileActivity tab4 = new UserProfileActivity();
+                return tab4;
             default: return null;
         }
 
@@ -63,6 +67,9 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
             case 2:
                 title = "Saved Items";
                 break;
+            case 3:
+                title = "Profile";
+                break;
             default: break;
         }
         return title;
@@ -70,7 +77,7 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     public static class ArrayListFragment extends Fragment {
@@ -103,13 +110,13 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
             switch(mNum){
                 case 0:
-                    v = inflater.inflate(R.layout.activity_home, container, false);
+                    v = inflater.inflate(R.layout.fragment_home, container, false);
                     break;
                 case 1:
-                    v = inflater.inflate(R.layout.activity_search, container, false);
+                    v = inflater.inflate(R.layout.fragment_search, container, false);
                     break;
                 case 2:
-                    v = inflater.inflate(R.layout.activity_saved, container, false);
+                    v = inflater.inflate(R.layout.fragment_saved, container, false);
                     break;
                 default: break;
             }

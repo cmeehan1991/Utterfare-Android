@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private final String TAG = this.getClass().getName();
     public static final String UF_SHARED_PREFERENCES = "UF_SHARED_PREFERENCES";
     public ProgressBar mainLoadingIndicator;
-    public SharedPreferences sharedPreferences;
+    public static SharedPreferences sharedPreferences;
     protected LocationManager locationManager;
     public static String lat, lng, fullAddress;
 

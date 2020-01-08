@@ -55,7 +55,7 @@ public class ResultsActivity extends Fragment implements RecyclerView.OnScrollCh
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                 Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.activity_results, container, false);
+        v = inflater.inflate(R.layout.fragment_results, container, false);
         return v;
     }
 

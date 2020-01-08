@@ -19,7 +19,6 @@ import java.net.URLEncoder;
  */
 public class SignInModel extends AsyncTask<String, Void, String> {
     private final String TAG  = this.getClass().getName();
-    private UserLoginActivity userLoginActivity;
 
     @Override
     protected String doInBackground(String... args) {

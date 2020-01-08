@@ -1,46 +1,46 @@
-package com.cbmwebdevelopment.utterfare.profile;
+package com.cbmwebdevelopment.utterfare.user;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.cbmwebdevelopment.utterfare.main.GlobalVariables;
+import com.cbmwebdevelopment.utterfare.main.MainActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
+import static com.google.android.gms.plus.PlusOneDummyView.TAG;
+
 /**
- * Created by Connor Meehan on 5/9/18.
+ * Created by Connor Meehan on 2020-01-07.
  * CBM Web Development
  * Connor.Meehan@cbmwebdevelopment.com
  */
-public class GetUserInformationModel extends AsyncTask<String, Void, String> implements GlobalVariables {
-    private final String TAG = getClass().getName();
+public class UserProfileModel extends AsyncTask<String, Void, String> {
+
     @Override
-    protected String doInBackground(String... args) {
+    protected String doInBackground(String... args){
+        String link = "https://www.utterfare.com/includes/php/Users.php";
         String userId = args[0];
-        String results = null;
+
         try{
+            URL url = new URL(link);
+            URLConnection conn = url.openConnection();
+            conn.setDoOutput(true);
 
             String data = URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode("get_user", "UTF-8");
             data += "&" + URLEncoder.encode("user_id", "UTF-8") + "=" + URLEncoder.encode(userId, "UTF-8");
-
-            // Establish the connection
-            URL url = new URL(USER_LINK);
-            URLConnection conn = url.openConnection();
-            conn.setDoOutput(true);
 
             OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
             wr.write(data);
             wr.flush();
 
-            // Read the response
             BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
             StringBuilder sb = new StringBuilder();
             String line = null;
 
@@ -49,12 +49,12 @@ public class GetUserInformationModel extends AsyncTask<String, Void, String> imp
                 break;
             }
 
-            results = sb.toString();
-
+            return sb.toString();
 
         }catch(IOException ex){
-            Log.e(TAG, "Error: " + ex.getMessage());
+            Log.e(TAG, "User Profile Error");
+            Log.e(TAG, ex.getMessage());
+            return "";
         }
-        return results;
     }
 }

@@ -1,4 +1,4 @@
-package com.cbmwebdevelopment.utterfare.profile;
+package com.cbmwebdevelopment.utterfare.user;
 
 import android.os.AsyncTask;
 import android.util.Log;
