@@ -1,17 +1,19 @@
 package com.cbmwebdevelopment.utterfare.home;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.cbmwebdevelopment.utterfare.main.MainActivity;
 
@@ -34,20 +36,22 @@ import static android.view.View.VISIBLE;
  * CBM Web Development
  * Connor.Meehan@cbmwebdevelopment.com
  */
-public class HomeActivity extends Fragment {
+public class HomeActivity extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private View v;
-    private RecyclerView topPicksRV, localPicksRV, personalizedPicksRV;
+    private RecyclerView homeItemsRV;
     private Context context;
     private final String TAG = this.getTag();
-    public List<HomeItems> topPicksList, localPicksList, personalizedPicksList;
-    private RecyclerView.Adapter topItemsAdapter, localItemsAdapter, personalizedItemsAdapter;
-    private RecyclerView.LayoutManager topPicksLayoutManager, localPicksLayoutManager, personalizedPicksLayoutManager;
-    private ProgressBar topItemsProgressBar, localItemsProgressBar, personalizedItemsProgressBar;
-    private LinearLayout homeContentLayout;
-    private ViewGroup container;
+    public List<HomeItems> homeItemsList;
+    private RecyclerView.Adapter homeItemsAdapter;
+    private RecyclerView.LayoutManager homeFeedLayoutManager;
+    private ProgressBar homeItemsProgressBar;
     private String lat, lng, fullAddress;
-    private HomeItemsController topItemsController, localItemsController, personalizedItemsController;
+    private HomeItemsController topItemsController;
+    private int page = 1;
+    private boolean updating, loading;
+    private HomeActivity homeActivity;
 
 
     @Override
@@ -60,36 +64,43 @@ public class HomeActivity extends Fragment {
         this.fullAddress = MainActivity.fullAddress != null  ? MainActivity.fullAddress : "6 Kent Ct., Hilton Head Island SC, 29926";
 
         if(isVisibleToUser) {
-            ExecutorService executor = Executors.newCachedThreadPool();
-            executor.submit(()->{
-                topItemsController = new HomeItemsController(this);
-                topItemsController.execute(this.fullAddress, "25", "get_top_items");
-
-            });
-
-            executor.submit(()->{
-                localItemsController = new HomeItemsController(this);
-                localItemsController.execute(fullAddress, "25", "get_local_items");
-
-            });
-
-            executor.submit(()->{
-                personalizedItemsController = new HomeItemsController(this);
-                personalizedItemsController.execute(fullAddress, "25", "get_recommendations");
-            });
-
+            this.loadItems();
         }
     }
 
     private void initFeeds(){
 
-        topItemsAdapter = new HomeItemsAdapter(topPicksList, context);
-        localItemsAdapter = new HomeItemsAdapter(localPicksList, context);
-        personalizedItemsAdapter = new HomeItemsAdapter(personalizedPicksList, context);
+        homeItemsAdapter = new HomeItemsAdapter(homeItemsList, context);
+        homeItemsRV.setAdapter(homeItemsAdapter);
+        homeItemsRV.addOnScrollListener(new RecyclerView.OnScrollListener(){
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+                // Check for scroll down
+                if( dy > 0){
+                    int visibleItemCount = homeFeedLayoutManager.getChildCount();
+                    int totalItemCount = homeFeedLayoutManager.getItemCount();
 
-        topPicksRV.setAdapter(topItemsAdapter);
-        localPicksRV.setAdapter(localItemsAdapter);
-        personalizedPicksRV.setAdapter(personalizedItemsAdapter);
+                    if(totalItemCount == visibleItemCount) {
+                        // First we are going to check to make sure we are not updating, loading more items, and that there are enough items to warrant
+                        // another load
+                        if (updating == false && loading == false && homeItemsList.size() % 25 == 0) {
+                            loading = true;
+                            page += 1;
+                            loadItems();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    private void loadItems(){
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.submit(()->{
+            topItemsController = new HomeItemsController(this);
+            topItemsController.execute(this.fullAddress, "25", "getMobileHomeFeedItems", "25", String.valueOf(page));
+            executor.shutdown();
+        });
     }
 
     @Override
@@ -97,7 +108,7 @@ public class HomeActivity extends Fragment {
         super.onCreate(savedInstance);
 
         v = layoutInflater.inflate(R.layout.fragment_home, container, false);
-
+        this.homeActivity = this;
         this.context = v.getContext();
 
         return v;
@@ -107,81 +118,63 @@ public class HomeActivity extends Fragment {
     public void onActivityCreated(Bundle savedInstance) {
         super.onActivityCreated(savedInstance);
 
-        topPicksRV = (RecyclerView) v.findViewById(R.id.top_picks_rv);
-        localPicksRV = (RecyclerView) v.findViewById(R.id.local_picks_rv);
-        personalizedPicksRV = (RecyclerView) v.findViewById(R.id.personalized_picks_rv);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.home_swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
-        homeContentLayout = (LinearLayout) v.findViewById(R.id.home_content_layout);
 
-        topItemsProgressBar = (ProgressBar) v.findViewById(R.id.top_items_progress_bar);
-        localItemsProgressBar = (ProgressBar) v.findViewById(R.id.local_picks_progress_bar);
-        personalizedItemsProgressBar = (ProgressBar) v.findViewById(R.id.personalized_picks_progress_bar);
+        homeItemsRV = (RecyclerView) v.findViewById(R.id.home_items_rv);
 
-        topPicksLayoutManager = new LinearLayoutManager(v.getContext(), RecyclerView.HORIZONTAL, false);
-        localPicksLayoutManager = new LinearLayoutManager(v.getContext(), RecyclerView.HORIZONTAL, false);
-        personalizedPicksLayoutManager = new LinearLayoutManager(v.getContext(), RecyclerView.HORIZONTAL, false);
+        homeItemsProgressBar = (ProgressBar) v.findViewById(R.id.home_items_progress_bar);
 
-        topPicksRV.setLayoutManager(topPicksLayoutManager);
-        localPicksRV.setLayoutManager(localPicksLayoutManager);
-        personalizedPicksRV.setLayoutManager(personalizedPicksLayoutManager);
+        homeFeedLayoutManager = new LinearLayoutManager(v.getContext(), RecyclerView.VERTICAL, false);
 
-        topPicksList = new ArrayList<>();
-        localPicksList = new ArrayList<>();
-        personalizedPicksList = new ArrayList<>();
+        homeItemsRV.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
 
+        homeItemsList = new ArrayList<>();
 
         initFeeds();
     }
 
-    public void showHomeItems(String data, String section) {
+    public void showHomeItems(String data) {
 
         try {
-
             JSONArray jsonArray = new JSONArray(data);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
+
                 String itemId = jsonObj.getString("item_id");
                 String itemName = jsonObj.getString("item_name");
                 String itemImage = jsonObj.getString("primary_image");
-                switch (section) {
-                    case "get_top_items":
-                        topPicksList.add(new HomeItems(itemId, itemName, itemImage));
-                        break;
-                    case "get_local_items":
-                        localPicksList.add(new HomeItems(itemId, itemName, itemImage));
-                        break;
-                    case "get_recommendations":
-                        personalizedPicksList.add(new HomeItems(itemId, itemName, itemImage));
-                        break;
-                    default:
-                        break;
+
+                homeItemsList.add(new HomeItems(itemId, itemName, itemImage));
+                homeItemsAdapter.notifyDataSetChanged();
+                homeItemsProgressBar.setVisibility(GONE);
+                homeItemsRV.setVisibility(VISIBLE);
+
+                updating = false;
+                loading = false;
+                if(mSwipeRefreshLayout.isRefreshing()){
+                    mSwipeRefreshLayout.setRefreshing(false);
                 }
             }
-            switch (section) {
-                case "get_top_items":
-                    topItemsAdapter.notifyDataSetChanged();
-                    topItemsProgressBar.setVisibility(GONE);
-                    topPicksRV.setVisibility(VISIBLE);
-                    break;
-                case "get_local_items":
-                    localItemsAdapter.notifyDataSetChanged();
-                    localItemsProgressBar.setVisibility(GONE);
-                    localPicksRV.setVisibility(VISIBLE);
-                    break;
-                case "get_recommendations":
-                    personalizedItemsAdapter.notifyDataSetChanged();
-                    personalizedItemsProgressBar.setVisibility(GONE);
-                    personalizedPicksRV.setVisibility(VISIBLE);
-                    break;
-                default:
-                    break;
-            }
-
         } catch (JSONException ex) {
             Log.e(TAG, "JSON Exception");
             Log.e(this.getClass().getName(), "JSON Exception" + ex.getMessage());
             Log.e(TAG, "Result");
             Log.e(this.getClass().getName(), data);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.submit(()->{
+            Log.i(TAG, "Refreshing");
+            topItemsController = new HomeItemsController(this);
+            topItemsController.execute(this.fullAddress, "25", "getMobileHomeFeedItems", "25", String.valueOf(page));
+            executor.shutdown();
+            homeItemsList.clear();
+
+        });
     }
 }

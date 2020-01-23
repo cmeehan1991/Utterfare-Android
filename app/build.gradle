@@ -5,10 +5,10 @@ android {
     buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.cbmwebdevelopment.utterfare"
-        minSdkVersion 28
+        minSdkVersion 26
         targetSdkVersion 28
-        versionCode 9
-        versionName "3.0.1"
+        versionCode 12
+        versionName "3.0.4"
         //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         compileOptions{

@@ -21,7 +21,6 @@ public class HomeItemsController extends AsyncTask<String, String, String> {
 
     private HomeActivity homeActivity;
     private final String TAG = this.getClass().getName();
-    private String action;
     public HomeItemsController(HomeActivity homeActivity){
         this.homeActivity = homeActivity;
     }
@@ -35,15 +34,22 @@ public class HomeItemsController extends AsyncTask<String, String, String> {
 
         String location = args[0];
         String distance = args[1];
-        this.action = args[2];
+        String action = args[2];
+        String numberOfItems = args[3];
+        String page = args[4];
+
 
         String link = "https://www.utterfare.com/includes/php/search.php";
+
+
         try{
 
             // Set the arguments
             String data = URLEncoder.encode("location", "UTF-8") + "=" + URLEncoder.encode(location, "UTF-8");
             data += "&" + URLEncoder.encode("distance", "UTF-8") + "=" + URLEncoder.encode(distance, "UTF-8");
             data += "&" + URLEncoder.encode("action", "UTF-8") + "=" + URLEncoder.encode(action, "UTF-8");
+            data += "&" + URLEncoder.encode("num_items", "UTF-8") + "=" + URLEncoder.encode(numberOfItems, "UTF-8");
+            data += "&" + URLEncoder.encode("page", "UTF-8") + "=" + URLEncoder.encode(page, "UTF-8");
 
             // Establish the connection
             URL url = new URL(link);
@@ -83,6 +89,6 @@ public class HomeItemsController extends AsyncTask<String, String, String> {
 
     @Override
     protected void onPostExecute(String result){
-        homeActivity.showHomeItems(result, this.action);
+        homeActivity.showHomeItems(result);
     }
 }

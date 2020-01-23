@@ -1,6 +1,8 @@
 package com.cbmwebdevelopment.utterfare.home;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +22,9 @@ import com.cbmwebdevelopment.utterfare.images.LoadImages;
 import com.cbmwebdevelopment.utterfare.single.SingleItemActivity;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import cbmwebdevelopment.utterfare.R;
 
@@ -59,14 +64,13 @@ public class HomeItemsAdapter extends RecyclerView.Adapter<HomeItemsAdapter.View
         HomeItems homeItems = listItems.get(i);
 
         viewHolder.itemName.setText(homeItems.getItemName());
-        new LoadImages((ImageView) viewHolder.itemView.findViewById(R.id.home_item_photo)).execute(homeItems.getItemImageUrl());
+
+        LoadImages loadImages = new LoadImages((ImageView) viewHolder.itemView.findViewById(R.id.home_item_photo));
+        loadImages.execute(homeItems.getItemImageUrl());
 
         viewHolder.cardView.setOnClickListener((listener)->{
             Bundle bundle = new Bundle();
             bundle.putString("itemId", homeItems.getItemId());
-
-            Log.i(TAG, homeItems.getItemName());
-            Log.i(TAG, homeItems.getItemId());
 
             goToSingleItemView(bundle);
         });
